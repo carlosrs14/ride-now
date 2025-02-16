@@ -10,7 +10,7 @@ Asimismo, debe mostrar las condiciones generales del vehículo y sus atributos p
 El prestador debe recargar a la aplicación un mínimo de dinero para ofrecer sus servicios. Para el sistema quedará un 5% por transacción o viaje.
 
 autores:
-Meikell Montoya
+Meikell Montoya @meikell007
 Kevin Torres @kevintorresleonel
 Rossimar Jiménez @Rossy26
 Carlos Rincones @carlosrs14
