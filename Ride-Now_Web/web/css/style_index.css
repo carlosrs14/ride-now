@@ -1,0 +1,117 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #dddada;
+    margin: 0;
+  }
+
+
+  header {
+    background-color: #007BFF;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    color: white;
+  }
+
+  .formulario {
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+
+  .formulario-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .recuadro {
+    background-color: #e0f7ff;
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s;
+  }
+
+  .recuadro:hover {
+    transform: scale(1.05);
+  }
+
+  .recuadro input,
+  .recuadro select {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  input[type="date"] {
+    text-align: right;
+  }
+
+  .botones {
+    display: flex;
+    gap: 10px;
+  }
+
+  .botones button {
+    padding: 10px 20px;
+    border: 2px solid;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .botones button:hover {
+    transform: scale(1.05);
+  }
+
+  .botones button.btn-registrarse {
+    border-color: green;
+  }
+  .botones button.btn-cancelar {
+    border-color: red;
+  }
+
+
+  .iniciar-sesion {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #007BFF;
+    background-color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #007BFF;
+    transition: transform 0.3s;
+  }
+
+  .iniciar-sesion:hover {
+    transform: scale(1.05);
+  }
+
+  select {
+    background-color: #e0f7ff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  select::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  select::-webkit-scrollbar-thumb {
+    background-color: #007BFF;
+    border-radius: 3px;
+  }
