@@ -50,10 +50,6 @@ public class ViajeControl extends HttpServlet {
         }
         request.setAttribute("mensaje", "Hubo un error al consultar los viajes");
         dispatcher.forward(request, response);
-        
-        
-        
-            
     }
  // request.getRequestDispatcher("/jsp/viajes.jsp").forward(request, response);
 }

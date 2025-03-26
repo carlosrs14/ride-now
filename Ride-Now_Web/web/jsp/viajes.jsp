@@ -22,11 +22,11 @@
     <body>
         <header>
             <nav>
-                <a href="#">Ride Now</a>
-                <a href="#">Viajes</a>
-                <a href="./reservas.jsp">Reservas</a>
-                <a href="">Reseñas</a>
-                <a href="">Denuncias</a>
+                <a href="${pageContext.request.contextPath}/jsp/viajes.jsp">Ride Now</a>
+                <a href="${pageContext.request.contextPath}/jsp/viajes.jsp">Viajes</a>
+                <a href="${pageContext.request.contextPath}/jsp/reservas.jsp">Reservas</a>
+                <a href="#">Reseñas</a>
+                <a href="#">Denuncias</a>
                 <div id="iniciar-sesion">
                     <a href=""><i class="bi bi-person-circle"></i></a>
                 </div>

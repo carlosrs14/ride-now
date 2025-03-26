@@ -13,16 +13,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
-        <link rel="stylesheet" href="../css/style_viajes.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style_viajes.css"/>
     </head>
     <body>
         <header>
             <nav>
-                <a href="./viajes.jsp">Ride Now</a>
-                <a href="./viajes.jsp">Viajes</a>
+                <a href="${pageContext.request.contextPath}/jsp/viajes.jsp">Ride Now</a>
+                <a href="${pageContext.request.contextPath}/jsp/viajes.jsp">Viajes</a>
                 <a href="#">Reservas</a>
-                <a href="">Reseñas</a>
-                <a href="">Denuncias</a>
+                <a href="#">Reseñas</a>
+                <a href="#">Denuncias</a>
                 <div id="iniciar-sesion">
                     <a href=""><i class="bi bi-person-circle"></i></a>
                 </div>

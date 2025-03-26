@@ -10,11 +10,21 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./css/style_index.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style_index.css"/>
         <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
         <title>Registrarse - Ride Now</title>
     </head>
     <body>
+        <% 
+            String mensaje = (String) request.getAttribute("mensaje");
+            if (mensaje != null) {
+        %>
+                <script>
+                alert("<%= mensaje %>");
+                </script>
+        <% 
+            }
+        %>
         <header>
             <h1>Regístrate en nuestra App RideNow</h1>
         </header>
@@ -48,7 +58,7 @@
                 </div>
 
                 <p>¿Ya tienes una cuenta?</p>
-                <a href="./jsp/login.jsp" class="iniciar-sesion">Iniciar Sesión</a>
+                <a href="${pageContext.request.contextPath}/jsp/login.jsp" class="iniciar-sesion">Iniciar Sesión</a>
             </div>
         </form>
     </body>

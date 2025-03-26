@@ -58,18 +58,14 @@ public class ClienteControl extends HttpServlet {
             String passwordConfirm = request.getParameter("passwordConfirm");
             if (!password.equals(passwordConfirm)) {
                 request.setAttribute("mensaje", "El cliente NO ha sido creado correctamente.");
-                
-                request.getRequestDispatcher("./index.jsp").forward(request, response);
-                PrintWriter out = response.getWriter();
-                out.print("error con las contrasenas");
-                out.flush();
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
                 return;
             }
             
             Cliente cliente = new Cliente(0, dia, mes, anio, nombre, apellido, telefono, correo, password);
             clienteServicio.registrarCliente(cliente);
-            request.setAttribute("mensaje", "El cliente ha sido creado correctamente.");
-            request.getRequestDispatcher("./index.jsp").forward(request, response);
+            request.setAttribute("mensaje", "El cliente con email " + cliente.getCorreo() + "  ha sido creado correctamente.");
+            request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
             //TODO enviar el cliente
             
         }
@@ -89,11 +85,11 @@ public class ClienteControl extends HttpServlet {
                 request.setAttribute("mensaje", "Login exitoso");
                 HttpSession sesion = request.getSession();
                 sesion.setAttribute("cliente", cliente);
-                request.getRequestDispatcher("./jsp/viajes.jsp").forward(request, response);
+                request.getRequestDispatcher("/jsp/viajes.jsp").forward(request, response);
             } else {
                 
                 request.setAttribute("mensaje", "Hubo un error");    
-                request.getRequestDispatcher("./jsp/login.jsp").forward(request, response);
+                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
             }
         
         }

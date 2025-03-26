@@ -16,6 +16,16 @@
         <title>Login - Ride Now</title>
     </head>
     <body>
+        <% 
+            String mensaje = (String) request.getAttribute("mensaje");
+            if (mensaje != null) {
+        %>
+                <script>
+                alert("<%= mensaje %>");
+                </script>
+        <% 
+            }
+        %>
         <div class="container">
             <form action="http://localhost:8080/Ride-Now_Web/ClienteControl" method="GET" class="login-form">
                 <input type="hidden" name="metodo" value="login">
