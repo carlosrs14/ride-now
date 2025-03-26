@@ -12,14 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author crinc
  */
-@WebServlet(name = "Registro", urlPatterns = {"/Registro"})
+@WebServlet(name = "ClienteControl", urlPatterns = {"/ClienteControl"})
 public class ClienteControl extends HttpServlet {
     private ClienteServicio clienteServicio;
 
@@ -67,9 +67,7 @@ public class ClienteControl extends HttpServlet {
             }
             
             Cliente cliente = new Cliente(0, dia, mes, anio, nombre, apellido, telefono, correo, password);
-            JOptionPane.showMessageDialog(null, "aqui 1");
             clienteServicio.registrarCliente(cliente);
-            JOptionPane.showMessageDialog(null, "aqui 2");
             request.setAttribute("mensaje", "El cliente ha sido creado correctamente.");
             request.getRequestDispatcher("./index.jsp").forward(request, response);
             //TODO enviar el cliente
@@ -77,49 +75,29 @@ public class ClienteControl extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-   /* @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    /*
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        processRequest(request, response);
+        clienteServicio = new ClienteServicio();
+        
+        String metodo = request.getParameter("metodo");
+        if ("login".equals(metodo)) {
+            String correo = request.getParameter("email");
+            String password = request.getParameter("password");
+            Cliente cliente = clienteServicio.login(correo, password);
+            if (cliente != null ) {
+                request.setAttribute("mensaje", "Login exitoso");
+                HttpSession sesion = request.getSession();
+                sesion.setAttribute("cliente", cliente);
+                request.getRequestDispatcher("./jsp/viajes.jsp").forward(request, response);
+            } else {
+                
+                request.setAttribute("mensaje", "Hubo un error");    
+                request.getRequestDispatcher("./jsp/login.jsp").forward(request, response);
+            }
+        
+        }
     }
-    */
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     
-    /*
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-    
-    
-    */
 
 }

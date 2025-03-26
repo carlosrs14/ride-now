@@ -13,12 +13,14 @@ public class Reserva {
     private Cliente cliente;
     private Pago pago;
     private Fecha fecha;
-
-    public Reserva(int numeroDePuestos, Cliente cliente, int dia, int mes, int anio, float monto, String tipo) {
+    private Viaje viaje;
+            
+    public Reserva(int numeroDePuestos, Cliente cliente, int dia, int mes, int anio, float monto, String tipoPago, Viaje viaje) {
         this.numeroDePuestos = numeroDePuestos;
         this.cliente = cliente;
         this.fecha = new Fecha(dia, mes, anio);
-        this.pago = new Pago(monto, tipo) {};
+        this.pago = new Pago(monto, tipoPago) {};
+        this.viaje = viaje;
     }
 
     /**
@@ -75,5 +77,19 @@ public class Reserva {
      */
     public void setFecha(Fecha fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * @return the viaje
+     */
+    public Viaje getViaje() {
+        return viaje;
+    }
+
+    /**
+     * @param viaje the viaje to set
+     */
+    public void setViaje(Viaje viaje) {
+        this.viaje = viaje;
     }
 }

@@ -16,76 +16,63 @@
         <link rel="stylesheet" href="../css/style_viajes.css"/>
     </head>
     <body>
-  <header>
-    <nav>
-      <a href="./viajes.jsp">Ride Now</a>
-      <a href="./viajes.jsp">Viajes</a>
-      <a href="#">Reservas</a>
-      <a href="">Reseñas</a>
-      <a href="">Denuncias</a>
-      <div id="iniciar-sesion">
-        <a href=""><i class="bi bi-person-circle"></i></a>
-      </div>
-    </nav>
-  </header>
-  <main>
-    <div id="titulo">
-      <h1>Estas son tus reservas:</h1>
-    </div>
- 
-    <table>
-      <thead>
-        <tr>
-          <th>Origen</th>
-          <th>Destino</th>
-          <th>Fecha</th>
-          <th>Hora</th>
-          <th>Prestador de servicio</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>santa marta</td>
-          <td>barranquilla</td>
-          <td>11/03</td>
-          <td>7:30pm</td>
-          <td>Hector Mesa</td>
-          <td><i class="bi bi-trash" style="cursor: pointer;"></i></td>
-        </tr>
-        <tr>
-          <td>santa marta</td>
-          <td>bogotá</td>
-          <td>12/03</td>
-          <td>7:30pm</td>
-          <td>Fernando Rojas</td>
-          <td><i class="bi bi-trash" style="cursor: pointer;"></i></td>
-        </tr>
-        <tr>
-          <td>santa marta</td>
-          <td>barranquilla</td>
-          <td>13/03</td>
-          <td>7:30pm</td>
-          <td>Chespirito Gomez</td>
-          <td><i class="bi bi-trash" style="cursor: pointer;"></i></td>
-        </tr>
-        <tr>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-      </tbody>
-    </table>
-  </main>
-</body>
+        <header>
+            <nav>
+                <a href="./viajes.jsp">Ride Now</a>
+                <a href="./viajes.jsp">Viajes</a>
+                <a href="#">Reservas</a>
+                <a href="">Reseñas</a>
+                <a href="">Denuncias</a>
+                <div id="iniciar-sesion">
+                    <a href=""><i class="bi bi-person-circle"></i></a>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div id="titulo">
+                <h1>Estas son tus reservas:</h1>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Prestador de servicio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>santa marta</td>
+                        <td>barranquilla</td>
+                        <td>11/03</td>
+                        <td>7:30pm</td>
+                        <td>Hector Mesa</td>
+                        <td><i class="bi bi-trash" style="cursor: pointer;"></i></td>
+                    </tr>
+                    <tr>
+                        <td>santa marta</td>
+                        <td>bogotá</td>
+                        <td>12/03</td>
+                        <td>7:30pm</td>
+                        <td>Fernando Rojas</td>
+                        <td><i class="bi bi-trash" style="cursor: pointer;"></i></td>
+                    </tr>
+                    <tr>
+                        <td>santa marta</td>
+                        <td>barranquilla</td>
+                        <td>13/03</td>
+                        <td>7:30pm</td>
+                        <td>Chespirito Gomez</td>
+                        <td><i class="bi bi-trash" style="cursor: pointer;"></i></td>
+                    </tr>
+                    <tr>
+                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </body>
 </html>

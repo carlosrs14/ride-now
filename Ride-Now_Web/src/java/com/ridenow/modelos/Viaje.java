@@ -4,7 +4,6 @@
  */
 package com.ridenow.modelos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,9 +18,9 @@ public class Viaje {
     private Locacion origen;
     private Locacion destino;
     private String tipo;
-    private List<Reserva> reservas;
+    private Vehiculo vehiculo;
 
-    public Viaje(int id, int hora, float precio, String tipo, Fecha fecha, Locacion origen, Locacion destino) {
+    public Viaje(int id, int hora, float precio, String tipo, Fecha fecha, Locacion origen, Locacion destino, Vehiculo vehiculo) {
         this.id = id;
         this.hora = hora;
         this.precio = precio;
@@ -29,7 +28,12 @@ public class Viaje {
         this.origen = origen;
         this.destino = destino;
         this.tipo = tipo;
-        this.reservas = new ArrayList<>();
+        this.vehiculo = vehiculo;
+        
+    }
+
+    public Viaje(int idViaje) {
+        this.id = idViaje;
     }
 
     @Override
@@ -136,17 +140,17 @@ public class Viaje {
     }
 
     /**
-     * @return the reservas
+     * @return the vehiculo
      */
-    public List<Reserva> getReservas() {
-        return reservas;
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
 
     /**
-     * @param reservas the reservas to set
+     * @param vehiculo the vehiculo to set
      */
-    public void setReservas(List<Reserva> reservas) {
-        this.reservas = reservas;
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
     }
     
 }

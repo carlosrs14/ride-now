@@ -4,9 +4,6 @@
  */
 package com.ridenow.modelos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author crinc
@@ -18,16 +15,16 @@ public class Vehiculo {
     private String marca;
     private String color;
     private boolean tieneAire;
-    private List<Viaje> viajes;
+    private PrestadorDeServicio prestadorDeServicio;
 
-    public Vehiculo(int id, int modelo, String placa, String marca, String color, boolean tieneAire) {
+    public Vehiculo(int id, int modelo, String placa, String marca, String color, boolean tieneAire, PrestadorDeServicio prestadorDeServicio) {
         this.id = id;
         this.modelo = modelo;
         this.placa = placa;
         this.marca = marca;
         this.color = color;
         this.tieneAire = tieneAire;
-        viajes = new ArrayList<>();
+        this.prestadorDeServicio = prestadorDeServicio;
     }
 
     /**
@@ -101,20 +98,6 @@ public class Vehiculo {
     }
 
     /**
-     * @return the viajes
-     */
-    public List<Viaje> getViajes() {
-        return viajes;
-    }
-
-    /**
-     * @param viajes the viajes to set
-     */
-    public void setViajes(List<Viaje> viajes) {
-        this.viajes = viajes;
-    }
-
-    /**
      * @return the id
      */
     public int getId() {
@@ -126,5 +109,19 @@ public class Vehiculo {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * @return the prestadorDeServicio
+     */
+    public PrestadorDeServicio getPrestadorDeServicio() {
+        return prestadorDeServicio;
+    }
+
+    /**
+     * @param prestadorDeServicio the prestadorDeServicio to set
+     */
+    public void setPrestadorDeServicio(PrestadorDeServicio prestadorDeServicio) {
+        this.prestadorDeServicio = prestadorDeServicio;
     }
 }

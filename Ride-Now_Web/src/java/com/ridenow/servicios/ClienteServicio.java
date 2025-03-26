@@ -6,8 +6,6 @@ package com.ridenow.servicios;
 
 import com.ridenow.modelos.Cliente;
 import com.ridenow.repositorios.ClienteRepositorio;
-import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,13 +18,11 @@ public class ClienteServicio {
         clienteRepositorio = new ClienteRepositorio();
     }
     
-    public void registrarCliente(Cliente cliente) {
+    public boolean registrarCliente(Cliente cliente) {
         if (cliente != null) {
-            JOptionPane.showMessageDialog(null, "servicio 1");
-            clienteRepositorio.saveCliente(cliente);
-            JOptionPane.showMessageDialog(null, "servicio 2");
+            return clienteRepositorio.saveCliente(cliente);
         } else {
-            throw new IllegalArgumentException("los datos del cliente son invalidos");
+            return false;
         }
     }
     

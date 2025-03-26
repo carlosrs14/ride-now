@@ -58,9 +58,10 @@ public class ViajeRepositorio {
                 Locacion destinoLocacion = new Locacion(idLocacionDestino, nombreDestino, tipoDestino);
 
 
-                Viaje viaje = new Viaje(id, hora, precio, tipo, fecha, origenLocacion, destinoLocacion);
+                Viaje viaje = new Viaje(id, hora, precio, tipo, fecha, origenLocacion, destinoLocacion, null);
                 viajes.add(viaje);
             }
+            conexion.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

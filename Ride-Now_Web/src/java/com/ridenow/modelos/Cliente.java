@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class Cliente extends Persona {
 
+    public Cliente(int id) {
+        super(id);
+    }
+
     public Cliente(int id, int dia, int mes, int anio, String nombre, String apellido, String telefono, String correo, String password) {
         super(id, dia, mes, anio, nombre, apellido, telefono, correo, password);
     }

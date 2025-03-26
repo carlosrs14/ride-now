@@ -51,21 +51,16 @@ public class ClienteRepositorio {
 
                 conexion.commit();
                 conexion.close();
-                
-                JOptionPane.showMessageDialog(null, "Repositorio 1");
                 return true;
             } else {
                 // por si no se guardó bien
                 conexion.rollback();
                 conexion.close();
-                JOptionPane.showMessageDialog(null, "Repositorio 2");
                 return false;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e.toString());
-            JOptionPane.showMessageDialog(null, "Repositorio 3");
             return false;
         }
     }
@@ -77,7 +72,7 @@ public class ClienteRepositorio {
             return cliente;
         } 
         
-        String consultaSQL = "SELECT idpersona, nombre, apellido, email, fechanacimiento, telefono  "
+        String consultaSQL = "SELECT idpersona, nombre, apellido, email, fechanacimiento, telefono "
                 + "FROM personas "
                 + "WHERE email = ?;";
         try {
@@ -86,7 +81,6 @@ public class ClienteRepositorio {
             statement.setString(1, email);
             
             ResultSet result = statement.executeQuery();
-            
             if (result.next()) {
                 int idPersona = result.getInt("idpersona");
                 String nombre = result.getString("nombre");
@@ -98,7 +92,7 @@ public class ClienteRepositorio {
                 cliente = new Cliente(idPersona, diaNacimiento, mesNacimiento, anioNacimiento, nombre, apellido, telefono, email, "");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showConfirmDialog(null, e.toString());
         }
         return cliente;
     }
