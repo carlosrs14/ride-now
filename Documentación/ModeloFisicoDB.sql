@@ -89,6 +89,7 @@ CREATE TABLE Reservas (
 CREATE TABLE Recargas (
     IDRecarga SERIAL PRIMARY KEY,
     Cantidad DECIMAL(10, 2) NOT NULL,
+    FechaRecarga TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     IDPrestadorDeServicio INT NOT NULL,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
         PrestadoresDeServicio(IDPrestadorDeServicio)
