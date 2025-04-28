@@ -107,7 +107,7 @@ CREATE TABLE Resenas (
         PrestadoresDeServicio(IDPrestadorDeServicio)
 );
 
-CREATE TABLE Denucnias (
+CREATE TABLE Denuncias (
     IDResena SERIAL PRIMARY KEY,
     Motivo TEXT NOT NULL,
     FechaDenuncia TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
