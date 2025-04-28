@@ -18,10 +18,10 @@ import repositorios.UsuarioRepositorio;
 public class prueba {
     public static void main(String[] args) {
         // pruebaSave();
-        pruebaLogin();
+        // pruebaLogin();
     }
     
-    public static void pruebaLogin() {
+    public static void pruebaLogin() throws ClassNotFoundException {
         UsuarioRepositorio repositorio = new UsuarioRepositorio();
         String email = "nombre1@gmail.com";
         String password = "123456";
@@ -35,7 +35,7 @@ public class prueba {
             Logger.getLogger(prueba.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public static void pruebaSave() {
+    public static void pruebaSave() throws ClassNotFoundException {
         UsuarioRepositorio repositorio = new UsuarioRepositorio();
         Cliente cliente = new Cliente(0, 7, 7, 2000, "nombre", "apellido", "nombre1@gmail.com", "3000000009", "123456");
         try {
