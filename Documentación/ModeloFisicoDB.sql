@@ -163,26 +163,26 @@ INSERT INTO locaciones (nombre, tipo) VALUES ('Gaira', 'Barrio'); -- 7
 INSERT INTO locaciones (nombre, tipo) VALUES ('Libano', 'Barrio'); -- 8
 
 -- 10 viajes
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-11', '20:00', 30000, 1, 1, 2);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-12', '12:00', 30000, 2, 1, 3);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-12', '15:30', 30000, 3, 1, 4);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-12', '16:00', 30000, 4, 1, 2);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-12', '17:00', 30000, 5, 2, 1);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-13', '14:00', 30000, 1, 2, 4);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-15', '20:00', 30000, 2, 6, 7);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-16', '18:00', 30000, 3, 7, 6);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-7-20', '21:00', 30000, 4, 6, 8);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-7-25', '20:00', 30000, 5, 8, 7);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-11', 2000, 30000, 'ciudad-ciudad',1, 1, 2);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-12', 1200, 30000, 'ciudad-ciudad', 2, 1, 3);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-12', 1530, 30000,'ciudad-ciudad', 3, 1, 4);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-12', 1600, 30000,'ciudad-ciudad', 4, 1, 2);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-12', 1700, 30000,'ciudad-ciudad', 5, 2, 1);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-13', 1400, 30000,'ciudad-ciudad', 1, 2, 4);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-15', 2000, 30000, 'barrio-barrio', 2, 6, 7);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-16', 1800, 30000, 'barrio-barrio', 3, 7, 6);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-7-20', 2100, 30000, 'barrio-barrio', 4, 6, 8);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-7-25', 2000, 30000, 'barrio-barrio', 5, 8, 7);
 
 -- 1 cliente
 
