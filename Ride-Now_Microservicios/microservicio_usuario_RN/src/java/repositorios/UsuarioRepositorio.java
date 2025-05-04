@@ -30,11 +30,7 @@ public class UsuarioRepositorio {
         statementUsuario.setString(1, cliente.getNombre());
         statementUsuario.setString(2, cliente.getApellido());
         statementUsuario.setString(3, cliente.getCorreo());
-        String anio = String.valueOf(cliente.getFechaNacimiento().getYear());
-        String mes = String.valueOf(cliente.getFechaNacimiento().getMonth());
-        String dia = String.valueOf(cliente.getFechaNacimiento().getDay());
-        String fecha = anio + "-" + mes + "-" + dia;
-        statementUsuario.setDate(4, Date.valueOf(fecha));
+        statementUsuario.setDate(4, Date.valueOf(cliente.getFechaNacimiento()));
         statementUsuario.setString(5, cliente.getTelefono());
         statementUsuario.setString(6, cliente.getPassword());
 
@@ -79,11 +75,9 @@ public class UsuarioRepositorio {
             int idUsuario = result.getInt("idusuario");
             String nombre = result.getString("nombre");
             String apellido = result.getString("apellido");
-            int diaNacimiento = 0;
-            int mesNacimiento = 0;
-            int anioNacimiento = 0;
+            String fecha = String.valueOf(result.getDate("fechanacimiento"));
             String telefono = result.getString("telefono");
-            cliente = new Cliente(idUsuario, diaNacimiento, mesNacimiento, anioNacimiento, nombre, apellido, telefono, email, "");
+            cliente = new Cliente(idUsuario, fecha, nombre, apellido, telefono, email, "");
         } 
         return cliente;
     }
