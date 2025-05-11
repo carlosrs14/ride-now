@@ -8,6 +8,7 @@ CREATE TABLE Usuarios (
     IDUsuario SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Apellido VARCHAR(100) NOT NULL,
+    Tipo VARCHAR(100) NOT NULL,
     Email VARCHAR(100) NOT NULL UNIQUE,
     FechaNacimiento DATE,
     Telefono VARCHAR(20),
@@ -23,21 +24,21 @@ CREATE TABLE TiposDePago (
 CREATE TABLE Clientes (
     IDCliente INT PRIMARY KEY,
     FOREIGN KEY (IDCliente) 
-        REFERENCES Usuarios(IDUsuario)
+        REFERENCES Usuarios(IDUsuario) ON DELETE CASCADE
 
 );
 
 CREATE TABLE Administradores (
     IDAdministrador INT PRIMARY KEY,
     FOREIGN KEY (IDAdministrador) 
-        REFERENCES Usuarios(IDUsuario)
+        REFERENCES Usuarios(IDUsuario) ON DELETE CASCADE
 );
 -- segun yo los admin deben tener atributos similares a los de cliente
 
 CREATE TABLE PrestadoresDeServicio (
     IDPrestadorDeServicio INT PRIMARY KEY,
     FOREIGN KEY (IDPrestadorDeServicio) 
-        REFERENCES Usuarios(IDUsuario)
+        REFERENCES Usuarios(IDUsuario) ON DELETE CASCADE
 );
 
 CREATE TABLE Vehiculos (
@@ -50,20 +51,21 @@ CREATE TABLE Vehiculos (
     capacidad INT NOT NULL,
     IDPrestadorDeServicio INT NOT NULL,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
 CREATE TABLE Viajes (
     IDViaje SERIAL PRIMARY KEY,
     Fecha DATE NOT NULL,
-    Hora TIME NOT NULL,
+    Hora INT NOT NULL,
+	Tipo VARCHAR(100) NOT NULL,
     Precio DECIMAL(10, 2) NOT NULL,
     IDVehiculo INT NOT NULL,
     IDLocacionOrigen INT NOT NULL,
     IDLocacionDestino INT NOT NULL,
 	FOREIGN KEY (IDLocacionDestino) REFERENCES Locaciones(IDLocacion),
     FOREIGN KEY (IDLocacionOrigen) REFERENCES Locaciones(IDLocacion),
-    FOREIGN KEY (IDVehiculo) REFERENCES Vehiculos(IDVehiculo)
+    FOREIGN KEY (IDVehiculo) REFERENCES Vehiculos(IDVehiculo) ON DELETE CASCADE
 );
 
 CREATE TABLE Pagos (
@@ -81,9 +83,9 @@ CREATE TABLE Reservas (
     IDCliente INT NOT NULL,
     IDPago INT NOT NULL,
 	IDViaje INT NOT NULL,
-	FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente),
+	FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPago) REFERENCES Pagos(IDPago),
-	FOREIGN KEY (IDViaje) REFERENCES viajes(IDviaje)
+	FOREIGN KEY (IDViaje) REFERENCES viajes(IDviaje) ON DELETE CASCADE
 );
 
 CREATE TABLE Recargas (
@@ -92,7 +94,7 @@ CREATE TABLE Recargas (
     FechaRecarga TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     IDPrestadorDeServicio INT NOT NULL,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
 CREATE TABLE Resenas (
@@ -102,9 +104,9 @@ CREATE TABLE Resenas (
     FechaResena TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     IDCliente INT NOT NULL,
     IDPrestadorDeServicio INT NOT NULL,
-    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente),
+    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
 CREATE TABLE Denuncias (
@@ -114,24 +116,24 @@ CREATE TABLE Denuncias (
     Estado VARCHAR(20) DEFAULT 'Pendiente',
     IDCliente INT NOT NULL,
     IDPrestadorDeServicio INT NOT NULL,
-    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente),
+    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 
 );
 ------Insercion de datos
 
 --5 Usuarios
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Juan', 'Perez', 'juan@gmail.com', '1990-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Yayito', 'Perez', 'yayito@gmail.com', '1980-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Travis', 'Bickle', 'travis@gmail.com', '1995-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Cristiano', 'Ronaldo', 'cr7@gmail.com', '2000-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Meikell', 'Montoya', 'meikell@gmail.com', '2005-10-10', '3000000001', '123456');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Juan', 'Perez', 'juan@gmail.com', '1990-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Yayito', 'Perez', 'yayito@gmail.com', '1980-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Travis', 'Bickle', 'travis@gmail.com', '1995-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Cristiano', 'Ronaldo', 'cr7@gmail.com', '2000-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Meikell', 'Montoya', 'meikell@gmail.com', '2005-10-10', '3000000001', '123456', 'prestadordeservicio');
 
 -- 5 prestadores de servicio
 INSERT INTO prestadoresdeservicio (idprestadordeservicio) VALUES (1);

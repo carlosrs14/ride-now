@@ -4,8 +4,9 @@
  */
 package controladores;
 
+import DTOs.UsuarioDTO;
 import com.google.gson.Gson;
-import com.ridenow.models.Cliente;
+import jakarta.servlet.ServletConfig;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
+import java.util.List;
 
 import servicios.UsuarioServicio;
 
@@ -27,7 +28,12 @@ public class UsuarioServlet extends HttpServlet {
     
     private UsuarioServicio servicio;
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        servicio = new UsuarioServicio();
+    }
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -42,41 +48,35 @@ public class UsuarioServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
-        // se debe cambiar este loguin par que tambien sea un metodo post
+
+        String idParam = request.getParameter("id");
         try {
-            servicio = new UsuarioServicio();
-            String correo = request.getParameter("correo");
-            String password = request.getParameter("password");
-            
-            Cliente cliente = servicio.login(correo, password);
-            
-            
-            if (cliente != null) {
-                String json = gson.toJson(cliente);
+            if (idParam == null) {
+                List<UsuarioDTO> usuarios = servicio.all();
+                response.getWriter().write(gson.toJson(usuarios));
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.getWriter().write(json);
-            } else {
-                String json = gson.toJson(new Mensaje("Login fallido"));
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write(json);
+                return;
             }
+
+            int id = Integer.parseInt(idParam);
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(id);
+            UsuarioDTO resultado = servicio.get(usuarioDTO);
+
+            if (resultado != null) {
+                response.getWriter().write(gson.toJson(resultado));
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.getWriter().write(gson.toJson(new Mensaje("Usuario no encontrado")));
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+            
         } catch (SQLException | ClassNotFoundException ex) {
-            String json = gson.toJson(new Mensaje("Error del servidor"));
+            response.getWriter().write(gson.toJson(new Mensaje("Error al obtener usuarios")));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(json);
         }
     }
-    class Mensaje {
-        private String mensaje;
 
-        public Mensaje(String mensaje) {
-            this.mensaje = mensaje;
-        }
-
-        public String getMensaje() {
-            return mensaje;
-        }
-    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -88,28 +88,95 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        BufferedReader reader = request.getReader();
-        StringBuilder jsonBuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            jsonBuilder.append(line);
-        }
-        String json = jsonBuilder.toString();
-
+        
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
-        Cliente cliente = gson.fromJson(json, Cliente.class);
-        // JOptionPane.showMessageDialog(null, cliente);
-        UsuarioServicio servicio = new UsuarioServicio();
+        BufferedReader reader = request.getReader();
+        
+        UsuarioDTO usuario = gson.fromJson(reader, UsuarioDTO.class);
+        UsuarioDTO created = null;
         try {
-            if (servicio.saveCliente(cliente)) {
-                response.getWriter().write("{\"mensaje\": \"Registro exitoso\"}");
-            } else {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"mensaje\": \"Registro fallido\"}");
-            }
+            created = servicio.saveUsuario(usuario);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (created != null) {
+            response.getWriter().write(gson.toJson(created));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("No creado")));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+    
+    /**
+     * Handles the HTTP <code>DELETE</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        
+        int id = Integer.parseInt(request.getParameter("id"));
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(id);
+        UsuarioDTO eliminado = null;
+        try {
+            eliminado = servicio.delete(usuarioDTO);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(ex.toString()));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (eliminado != null) {
+            response.getWriter().write(gson.toJson(eliminado));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("Usuario no encontrado")));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+    
+    /**
+     * Handles the HTTP <code>PUT</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        
+        BufferedReader reader = request.getReader();
+        UsuarioDTO usuarioDTO = gson.fromJson(reader, UsuarioDTO.class);
+        
+        UsuarioDTO actualizado = null;
+        try {
+            actualizado = servicio.update(usuarioDTO);
         } catch (SQLException | ClassNotFoundException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"mensaje\": \"" + ex.toString() + "\"}");
+            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            return;
+        }
+        if (actualizado != null) {
+            response.getWriter().write(gson.toJson(actualizado));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("Usuario no encontrado")));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
@@ -121,6 +188,17 @@ public class UsuarioServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
+    
+    class Mensaje {
+        private String mensaje;
 
+        public Mensaje(String mensaje) {
+            this.mensaje = mensaje;
+        }
+
+        public String getMensaje() {
+            return mensaje;
+        }
+    }
 }
