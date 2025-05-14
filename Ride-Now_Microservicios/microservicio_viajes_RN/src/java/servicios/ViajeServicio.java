@@ -9,31 +9,28 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import repositorios.ViajeRepositorio;
+import DAOs.ViajeDAO;
 
 /**
  *
  * @author xlancet
  */
 public class ViajeServicio {
-    private ViajeRepositorio repositorio;
+    private ViajeDAO repositorio;
 
     public ViajeServicio() {
-        repositorio = new ViajeRepositorio();
+        repositorio = new ViajeDAO();
     }
     
     public Map<String, Object> saveViaje(Viaje viaje){
         Map<String, Object> resultado = new HashMap<>();
         try {
-            boolean rta = repositorio.saveViaje(viaje);
-            String mensaje = rta? "viaje guardado": "viaje NO guardado";
+            Viaje rta = repositorio.create(viaje);
+            String mensaje = rta != null? "viaje guardado": "viaje NO guardado";
             resultado.put("mensaje", mensaje);
             resultado.put("resultado", "hecho");
         } catch (SQLException | ClassNotFoundException ex) {
             resultado.put("mensaje", ex.toString());
-            
         }
         return resultado;
     }
@@ -42,7 +39,7 @@ public class ViajeServicio {
         Map<String, Object> resultado = new HashMap<>();
         List<Viaje> viajes;
         try {
-            viajes = repositorio.listar();
+            viajes = repositorio.getAll();
             resultado.put("resultado", "hecho");
             resultado.put("viajes", viajes);
         } catch (SQLException | ClassNotFoundException ex) {
@@ -59,7 +56,7 @@ public class ViajeServicio {
         }
         try {
             int idViaje = Integer.parseInt(idViajeStr);
-            Viaje viaje = repositorio.buscar(idViaje);
+            Viaje viaje = repositorio.get(idViaje);
             resultado.put("viaje", viaje);
             resultado.put("resultado", "hecho");
         } catch (SQLException | NumberFormatException  | ClassNotFoundException ex) {
@@ -76,7 +73,7 @@ public class ViajeServicio {
         }
         try {
             int idViaje = Integer.parseInt(idViajeStr);
-            boolean rta = repositorio.eliminarViaje(idViaje);
+            boolean rta = repositorio.delete(idViaje);
             String mensaje = rta? "viaje elimindado": "no se encontro el viaje";
             resultado.put("mensaje", mensaje);
             resultado.put("resultado", "hecho");

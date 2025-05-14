@@ -6,8 +6,6 @@ package controladores;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ridenow.models.Locacion;
-import com.ridenow.models.Vehiculo;
 import com.ridenow.models.Viaje;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -16,11 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
-import javax.swing.JOptionPane;
 import servicios.ViajeServicio;
 
 /**
@@ -55,17 +50,15 @@ public class ViajeServlet extends HttpServlet {
         }
         
         switch (metodo) {
-            case "listar":
-                resultado = viajeServicio.listar();
-                break;
-            case "buscar": {
+            case "listar" -> resultado = viajeServicio.listar();
+            case "buscar" -> {
                 String idViajeStr = request.getParameter("idViaje");
                 resultado = viajeServicio.buscar(idViajeStr);
             }
-                break;
-            default:
+            default -> {
                 resultado = new HashMap<String, Object>();
                 resultado.put("mensaje", "no existe el metodo");
+            }
         }
         escribirJson(response, resultado);
         
