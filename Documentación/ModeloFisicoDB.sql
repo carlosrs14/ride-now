@@ -8,6 +8,7 @@ CREATE TABLE Usuarios (
     IDUsuario SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Apellido VARCHAR(100) NOT NULL,
+    Tipo VARCHAR(100) NOT NULL,
     Email VARCHAR(100) NOT NULL UNIQUE,
     FechaNacimiento DATE,
     Telefono VARCHAR(20),
@@ -23,21 +24,21 @@ CREATE TABLE TiposDePago (
 CREATE TABLE Clientes (
     IDCliente INT PRIMARY KEY,
     FOREIGN KEY (IDCliente) 
-        REFERENCES Usuarios(IDUsuario)
+        REFERENCES Usuarios(IDUsuario) ON DELETE CASCADE
 
 );
 
 CREATE TABLE Administradores (
     IDAdministrador INT PRIMARY KEY,
     FOREIGN KEY (IDAdministrador) 
-        REFERENCES Usuarios(IDUsuario)
+        REFERENCES Usuarios(IDUsuario) ON DELETE CASCADE
 );
 -- segun yo los admin deben tener atributos similares a los de cliente
 
 CREATE TABLE PrestadoresDeServicio (
     IDPrestadorDeServicio INT PRIMARY KEY,
     FOREIGN KEY (IDPrestadorDeServicio) 
-        REFERENCES Usuarios(IDUsuario)
+        REFERENCES Usuarios(IDUsuario) ON DELETE CASCADE
 );
 
 CREATE TABLE Vehiculos (
@@ -50,20 +51,21 @@ CREATE TABLE Vehiculos (
     capacidad INT NOT NULL,
     IDPrestadorDeServicio INT NOT NULL,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
 CREATE TABLE Viajes (
     IDViaje SERIAL PRIMARY KEY,
     Fecha DATE NOT NULL,
-    Hora TIME NOT NULL,
+    Hora INT NOT NULL,
+	Tipo VARCHAR(100) NOT NULL,
     Precio DECIMAL(10, 2) NOT NULL,
     IDVehiculo INT NOT NULL,
     IDLocacionOrigen INT NOT NULL,
     IDLocacionDestino INT NOT NULL,
 	FOREIGN KEY (IDLocacionDestino) REFERENCES Locaciones(IDLocacion),
     FOREIGN KEY (IDLocacionOrigen) REFERENCES Locaciones(IDLocacion),
-    FOREIGN KEY (IDVehiculo) REFERENCES Vehiculos(IDVehiculo)
+    FOREIGN KEY (IDVehiculo) REFERENCES Vehiculos(IDVehiculo) ON DELETE CASCADE
 );
 
 CREATE TABLE Pagos (
@@ -81,9 +83,9 @@ CREATE TABLE Reservas (
     IDCliente INT NOT NULL,
     IDPago INT NOT NULL,
 	IDViaje INT NOT NULL,
-	FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente),
+	FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPago) REFERENCES Pagos(IDPago),
-	FOREIGN KEY (IDViaje) REFERENCES viajes(IDviaje)
+	FOREIGN KEY (IDViaje) REFERENCES viajes(IDviaje) ON DELETE CASCADE
 );
 
 CREATE TABLE Recargas (
@@ -92,7 +94,7 @@ CREATE TABLE Recargas (
     FechaRecarga TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     IDPrestadorDeServicio INT NOT NULL,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
 CREATE TABLE Resenas (
@@ -102,9 +104,9 @@ CREATE TABLE Resenas (
     FechaResena TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     IDCliente INT NOT NULL,
     IDPrestadorDeServicio INT NOT NULL,
-    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente),
+    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
 CREATE TABLE Denuncias (
@@ -114,24 +116,24 @@ CREATE TABLE Denuncias (
     Estado VARCHAR(20) DEFAULT 'Pendiente',
     IDCliente INT NOT NULL,
     IDPrestadorDeServicio INT NOT NULL,
-    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente),
+    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio)
+        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 
 );
 ------Insercion de datos
 
 --5 Usuarios
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Juan', 'Perez', 'juan@gmail.com', '1990-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Yayito', 'Perez', 'yayito@gmail.com', '1980-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Travis', 'Bickle', 'travis@gmail.com', '1995-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Cristiano', 'Ronaldo', 'cr7@gmail.com', '2000-10-10', '3000000001', '123456');
-INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password)
-VALUES('Meikell', 'Montoya', 'meikell@gmail.com', '2005-10-10', '3000000001', '123456');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Juan', 'Perez', 'juan@gmail.com', '1990-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Yayito', 'Perez', 'yayito@gmail.com', '1980-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Travis', 'Bickle', 'travis@gmail.com', '1995-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Cristiano', 'Ronaldo', 'cr7@gmail.com', '2000-10-10', '3000000001', '123456', 'prestadordeservicio');
+INSERT INTO Usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)
+VALUES('Meikell', 'Montoya', 'meikell@gmail.com', '2005-10-10', '3000000001', '123456', 'prestadordeservicio');
 
 -- 5 prestadores de servicio
 INSERT INTO prestadoresdeservicio (idprestadordeservicio) VALUES (1);
@@ -163,26 +165,26 @@ INSERT INTO locaciones (nombre, tipo) VALUES ('Gaira', 'Barrio'); -- 7
 INSERT INTO locaciones (nombre, tipo) VALUES ('Libano', 'Barrio'); -- 8
 
 -- 10 viajes
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-11', '20:00', 30000, 1, 1, 2);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-12', '12:00', 30000, 2, 1, 3);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-12', '15:30', 30000, 3, 1, 4);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-5-12', '16:00', 30000, 4, 1, 2);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-12', '17:00', 30000, 5, 2, 1);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-13', '14:00', 30000, 1, 2, 4);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-15', '20:00', 30000, 2, 6, 7);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-6-16', '18:00', 30000, 3, 7, 6);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-7-20', '21:00', 30000, 4, 6, 8);
-INSERT INTO viajes (fecha, hora, precio, idvehiculo, idlocacionorigen, idlocaciondestino)
-VALUES ('2025-7-25', '20:00', 30000, 5, 8, 7);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-11', 2000, 30000, 'ciudad-ciudad',1, 1, 2);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-12', 1200, 30000, 'ciudad-ciudad', 2, 1, 3);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-12', 1530, 30000,'ciudad-ciudad', 3, 1, 4);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-5-12', 1600, 30000,'ciudad-ciudad', 4, 1, 2);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-12', 1700, 30000,'ciudad-ciudad', 5, 2, 1);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-13', 1400, 30000,'ciudad-ciudad', 1, 2, 4);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-15', 2000, 30000, 'barrio-barrio', 2, 6, 7);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-6-16', 1800, 30000, 'barrio-barrio', 3, 7, 6);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-7-20', 2100, 30000, 'barrio-barrio', 4, 6, 8);
+INSERT INTO viajes (fecha, hora, precio, tipo, idvehiculo, idlocacionorigen, idlocaciondestino)
+VALUES ('2025-7-25', 2000, 30000, 'barrio-barrio', 5, 8, 7);
 
 -- 1 cliente
 

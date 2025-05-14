@@ -1,37 +1,30 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controladores;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ridenow.models.Locacion;
-import com.ridenow.models.Vehiculo;
-import com.ridenow.models.Viaje;
-import java.io.IOException;
+import com.ridenow.models.Reserva;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.sql.Date;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
-import javax.swing.JOptionPane;
-import servicios.ViajeServicio;
+import servicios.ReservaServicio;
 
 /**
  *
  * @author xlancet
  */
-@WebServlet(name = "ViajeServlet", urlPatterns = {"/ViajeServlet"})
-public class ViajeServlet extends HttpServlet {
-
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+@WebServlet(name = "ReservaServlet", urlPatterns = {"/ReservaServlet"})
+public class ReservaServlet extends HttpServlet {
+      // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -43,32 +36,17 @@ public class ViajeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ViajeServicio viajeServicio = new ViajeServicio();
+        ReservaServicio reservaServicio = new ReservaServicio();
         Map<String, Object> resultado;
-        String metodo = request.getParameter("metodo");
+        String idReservaStr = request.getParameter("idReserva");
         
-        if (metodo == null) {
+        if(idReservaStr == null) {
             resultado = new HashMap<>();
-            resultado.put("mensaje", "debe especificar el metodo");
-            escribirJson(response, resultado);
-            return;
+            resultado.put("mensaje", "Debe proporcionar el id");
+        } else {
+            resultado = reservaServicio.buscar(idReservaStr);
         }
-        
-        switch (metodo) {
-            case "listar":
-                resultado = viajeServicio.listar();
-                break;
-            case "buscar": {
-                String idViajeStr = request.getParameter("idViaje");
-                resultado = viajeServicio.buscar(idViajeStr);
-            }
-                break;
-            default:
-                resultado = new HashMap<String, Object>();
-                resultado.put("mensaje", "no existe el metodo");
-        }
-        escribirJson(response, resultado);
-        
+        escribirJson(response, resultado);  
     }
 
     /**
@@ -83,12 +61,12 @@ public class ViajeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Gson gson = new Gson();
-        ViajeServicio viajeServicio = new ViajeServicio();
+        ReservaServicio reservaServicio = new ReservaServicio();
         Map<String, Object> resultado;
         
         BufferedReader reader = request.getReader();
-        Viaje viaje = gson.fromJson(reader, Viaje.class);
-        resultado = viajeServicio.saveViaje(viaje);
+        Reserva reserva = gson.fromJson(reader, Reserva.class);
+        resultado = reservaServicio.saveReserva(reserva);
         escribirJson(response, resultado);
     }
     
@@ -103,9 +81,9 @@ public class ViajeServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ViajeServicio viajeServicio = new ViajeServicio();
-        String idViajeStr = (String) request.getParameter("idViaje");
-        Map<String, Object> resultado = viajeServicio.eliminarViaje(idViajeStr);
+        ReservaServicio reservaServicio = new ReservaServicio();
+        String idReservaStr = (String) request.getParameter("idReserva");
+        Map<String, Object> resultado = reservaServicio.eliminar(idReservaStr);
         escribirJson(response, resultado);
     }
     

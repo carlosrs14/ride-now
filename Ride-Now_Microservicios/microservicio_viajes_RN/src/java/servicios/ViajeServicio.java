@@ -6,7 +6,11 @@ package servicios;
 
 import com.ridenow.models.Viaje;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import repositorios.ViajeRepositorio;
 
 /**
@@ -20,19 +24,65 @@ public class ViajeServicio {
         repositorio = new ViajeRepositorio();
     }
     
-    public boolean saveViaje(Viaje viaje) throws SQLException, ClassNotFoundException {
-        return repositorio.saveViaje(viaje);
+    public Map<String, Object> saveViaje(Viaje viaje){
+        Map<String, Object> resultado = new HashMap<>();
+        try {
+            boolean rta = repositorio.saveViaje(viaje);
+            String mensaje = rta? "viaje guardado": "viaje NO guardado";
+            resultado.put("mensaje", mensaje);
+            resultado.put("resultado", "hecho");
+        } catch (SQLException | ClassNotFoundException ex) {
+            resultado.put("mensaje", ex.toString());
+            
+        }
+        return resultado;
     }
     
-    public List<Viaje> listar() throws SQLException, ClassNotFoundException {
-        return repositorio.listar();
+    public Map<String, Object> listar() {
+        Map<String, Object> resultado = new HashMap<>();
+        List<Viaje> viajes;
+        try {
+            viajes = repositorio.listar();
+            resultado.put("resultado", "hecho");
+            resultado.put("viajes", viajes);
+        } catch (SQLException | ClassNotFoundException ex) {
+            resultado.put("mensaje", ex.toString());
+        }
+        return resultado;
     }
     
-    public Viaje buscar(int idViaje) throws SQLException, ClassNotFoundException {
-        return repositorio.buscar(idViaje);
+    public Map<String, Object> buscar(String idViajeStr) {
+        Map<String, Object> resultado = new HashMap<>();
+        if (idViajeStr == null) {
+            resultado.put("mensaje", "debe escrbir un id");
+            return resultado;
+        }
+        try {
+            int idViaje = Integer.parseInt(idViajeStr);
+            Viaje viaje = repositorio.buscar(idViaje);
+            resultado.put("viaje", viaje);
+            resultado.put("resultado", "hecho");
+        } catch (SQLException | NumberFormatException  | ClassNotFoundException ex) {
+            resultado.put("mensaje", ex.toString());
+        }
+        return resultado;
     }
     
-    public boolean eliminarViaje(int idViaje) throws SQLException, ClassNotFoundException {
-        return repositorio.eliminarViaje(idViaje);
+    public Map<String, Object> eliminarViaje(String idViajeStr) {
+        Map<String, Object> resultado = new HashMap<>();
+        if (idViajeStr == null) {
+            resultado.put("mensaje", "debe escrbir un id");
+            return resultado;
+        }
+        try {
+            int idViaje = Integer.parseInt(idViajeStr);
+            boolean rta = repositorio.eliminarViaje(idViaje);
+            String mensaje = rta? "viaje elimindado": "no se encontro el viaje";
+            resultado.put("mensaje", mensaje);
+            resultado.put("resultado", "hecho");
+        } catch (SQLException | NumberFormatException  | ClassNotFoundException ex) {
+            resultado.put("mensaje", ex.toString());
+        }
+        return resultado;
     }
 }

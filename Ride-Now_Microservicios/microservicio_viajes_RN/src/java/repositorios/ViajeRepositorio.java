@@ -5,6 +5,8 @@
 package repositorios;
 
 import accesodatos.Conexion;
+import com.ridenow.models.Locacion;
+import com.ridenow.models.Vehiculo;
 import com.ridenow.models.Viaje;
 import java.sql.Connection;
 import java.sql.Date;
@@ -36,7 +38,7 @@ public class ViajeRepositorio {
         String dia = String.valueOf(viaje.getFecha().getDay());
         String fecha = anio + "-" + mes + "-" + dia;
         
-        statementViaje.setDate(1, Date.valueOf(fecha));
+        statementViaje.setDate(1, new Date(viaje.getFecha().getTime()));
         statementViaje.setInt(2, viaje.getHora());
         statementViaje.setFloat(3, viaje.getPrecio());
         statementViaje.setString(4, viaje.getTipo());
@@ -44,8 +46,8 @@ public class ViajeRepositorio {
         statementViaje.setInt(6, viaje.getOrigen().getId());
         statementViaje.setInt(7, viaje.getDestino().getId());
         
-        ResultSet result = statementViaje.executeQuery();
-        if (result.next()) {
+        int rows = statementViaje.executeUpdate();
+        if (rows > 0) {
             conexion.close();
             return true;
         } else {
@@ -66,14 +68,11 @@ public class ViajeRepositorio {
             int hora = result.getInt("hora");
             float precio = result.getFloat("precio");
             String tipo = result.getString("tipo");
-            int dia = 0;
-            int mes = 0;
-            int anio = 0;
             int idLocacionOrigen = result.getInt("idlocacionorigen");
             int idLocacionDestino = result.getInt("idlocaciondestino");
             int idvehiculo = result.getInt("idvehiculo");
-            Date fecha = new Date(dia, mes, anio);
-            Viaje viaje = new Viaje(idViaje, hora, precio,tipo,fecha , null, null, null);
+            Date fecha = Date.valueOf(result.getString("fecha"));
+            Viaje viaje = new Viaje(idViaje, hora, precio,tipo,fecha , new Locacion(idLocacionOrigen), new Locacion(idLocacionDestino), new Vehiculo(idvehiculo));
             return viaje;
         } else {
             return null; 
