@@ -97,7 +97,7 @@ public class UsuarioServlet extends HttpServlet {
         UsuarioDTO usuario = gson.fromJson(reader, UsuarioDTO.class);
         UsuarioDTO created = null;
         try {
-            created = servicio.saveUsuario(usuario);
+            created = servicio.save(usuario);
         } catch (SQLException | ClassNotFoundException ex) {
             response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

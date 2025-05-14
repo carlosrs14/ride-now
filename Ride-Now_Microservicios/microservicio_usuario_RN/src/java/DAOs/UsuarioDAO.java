@@ -16,14 +16,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author xlancet
  */
-public class UsuarioDAO implements DAO<Usuario>{
+public class UsuarioDAO implements DAO<Usuario> {
+    
     public UsuarioDAO() {
     }
 
@@ -162,9 +161,8 @@ public class UsuarioDAO implements DAO<Usuario>{
 
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
-        Connection conexion = Conexion.getConexion();
-
         String eliminarUsuario = "DELETE FROM usuarios WHERE idusuario = ?";
+        Connection conexion = Conexion.getConexion();
         PreparedStatement stmt = conexion.prepareStatement(eliminarUsuario);
         stmt.setInt(1, id);
 

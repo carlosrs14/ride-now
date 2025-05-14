@@ -10,6 +10,7 @@ import java.sql.SQLException;
 /**
  *
  * @author xlancet
+ * @param <G>
  */
 public interface DAO<G> {
     G create(G g) throws SQLException, ClassNotFoundException;
