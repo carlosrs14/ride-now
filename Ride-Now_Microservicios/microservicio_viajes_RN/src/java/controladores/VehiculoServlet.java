@@ -4,7 +4,7 @@
  */
 package controladores;
 
-import DTOs.VehiculoDTO;
+import models.VehiculoDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletConfig;
 import java.io.IOException;
@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import servicios.VehiculoServicio;
 
 /**
  *

@@ -2,12 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package servicios;
+package models;
 
 import com.ridenow.models.Cliente;
 import java.sql.SQLException;
-import DAOs.UsuarioDAO;
-import DTOs.UsuarioDTO;
 import com.ridenow.models.Administrador;
 import com.ridenow.models.PrestadorDeServicio;
 import com.ridenow.models.Usuario;

@@ -4,7 +4,7 @@
  */
 package controladores;
 
-import DTOs.UsuarioDTO;
+import models.UsuarioDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jakarta.servlet.ServletConfig;
@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.sql.SQLException;
-import servicios.UsuarioServicio;
+import models.UsuarioServicio;
 
 /**
  *
@@ -66,7 +66,14 @@ public class LoginServlet extends HttpServlet {
         
         String correo = jsonObject.get("correo").getAsString();
         String password = jsonObject.get("password").getAsString();
-        UsuarioDTO usuario = servicio.login(correo, password);
+        UsuarioDTO usuario = null;
+        try {
+            usuario = servicio.login(correo, password);
+        } catch (SQLException | ClassNotFoundException ex) {
+            String json = gson.toJson(new LoginServlet.Mensaje("Error desde la base de datos"));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write(json);
+        }
         
         if (usuario != null) {
             String json = gson.toJson(usuario);
@@ -87,7 +94,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
     
     class Mensaje {
         private String mensaje;
