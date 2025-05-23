@@ -14,10 +14,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -98,6 +98,27 @@ public class VehiculoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            Gson gson = new Gson();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            BufferedReader reader = request.getReader();
+            
+            VehiculoDTO vehiculo = gson.fromJson(reader, VehiculoDTO.class);
+            VehiculoDTO created = null;
+        try {
+            created = servicio.save(vehiculo);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (created != null) {
+            response.getWriter().write(gson.toJson(created));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("El vehiculo no fue creado")));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
     
     /**
@@ -110,7 +131,28 @@ public class VehiculoServlet extends HttpServlet {
      */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doDelete(request, response); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        response.setContentType("aplication/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        
+        int id = Integer.parseInt(request.getParameter("id"));
+        VehiculoDTO vehiculoDTO = new VehiculoDTO();
+        vehiculoDTO.setId(id);
+        VehiculoDTO eliminado = null;
+        try {
+            eliminado = servicio.delete(vehiculoDTO);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(ex.toString()));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (eliminado != null) {
+            response.getWriter().write(gson.toJson(eliminado));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("Vehiculo no encontrado")));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } 
     }
 
     /**
@@ -123,7 +165,28 @@ public class VehiculoServlet extends HttpServlet {
      */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doPut(request, response); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+       response.setContentType("aplication/json");
+       response.setCharacterEncoding("UTF-8");
+       Gson gson = new Gson();
+       
+       BufferedReader reader = request.getReader();
+       VehiculoDTO vehiculoDTO = gson.fromJson(reader, VehiculoDTO.class);
+       
+       VehiculoDTO actualizado = null;
+        try {
+            actualizado = servicio.update(vehiculoDTO);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            return;
+        }
+        if(actualizado != null) {
+            response.getWriter().write(gson.toJson(actualizado));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("Vehiculo no encontrado")));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     /**
