@@ -5,7 +5,7 @@
 package controladores;
 
 import models.VehiculoServicio;
-import models.VehiculoDTO;
+import models.DTOs.VehiculoDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletConfig;
 import java.io.IOException;

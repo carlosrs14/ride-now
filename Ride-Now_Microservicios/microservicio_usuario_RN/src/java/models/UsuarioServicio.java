@@ -4,6 +4,8 @@
  */
 package models;
 
+import models.DAOs.UsuarioDAO;
+import models.DTOs.UsuarioDTO;
 import com.ridenow.models.Cliente;
 import java.sql.SQLException;
 import com.ridenow.models.Administrador;

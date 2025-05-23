@@ -7,7 +7,9 @@ package controladores;
 import models.ViajeServicio;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ridenow.models.Usuario;
 import com.ridenow.models.Viaje;
+import jakarta.servlet.ServletConfig;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,8 +17,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import models.DTOs.ViajeDTO;
 
 /**
  *
@@ -24,9 +31,15 @@ import java.util.Map;
  */
 @WebServlet(name = "ViajeServlet", urlPatterns = {"/ViajeServlet"})
 public class ViajeServlet extends HttpServlet {
+    
+    private ViajeServicio servicio;
 
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        servicio = new ViajeServicio();
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -38,30 +51,35 @@ public class ViajeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ViajeServicio viajeServicio = new ViajeServicio();
-        Map<String, Object> resultado;
-        String metodo = request.getParameter("metodo");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
         
-        if (metodo == null) {
-            resultado = new HashMap<>();
-            resultado.put("mensaje", "debe especificar el metodo");
-            escribirJson(response, resultado);
-            return;
-        }
-        
-        switch (metodo) {
-            case "listar" -> resultado = viajeServicio.listar();
-            case "buscar" -> {
-                String idViajeStr = request.getParameter("idViaje");
-                resultado = viajeServicio.buscar(idViajeStr);
-            }
-            default -> {
-                resultado = new HashMap<String, Object>();
-                resultado.put("mensaje", "no existe el metodo");
+        String idViajeParam = request.getParameter("id");
+
+        if (idViajeParam == null) {
+            try {
+                List<ViajeDTO> viajes = servicio.all();
+                response.getWriter().write(gson.toJson(viajes));
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
+            } catch (SQLException | ClassNotFoundException ex) {
+                response.getWriter().write(gson.toJson(new Mensaje("Error de la base de datos")));
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
-        escribirJson(response, resultado);
-        
+        int id = Integer.parseInt(idViajeParam);
+        ViajeDTO viajeDTO = new ViajeDTO();
+        viajeDTO.setId(id);
+        try {
+            ViajeDTO resultado = servicio.get(viajeDTO);
+            response.getWriter().write(gson.toJson(resultado));
+            response.setStatus(HttpServletResponse.SC_OK);
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje("Error de la base de datos")));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -75,18 +93,33 @@ public class ViajeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
-        ViajeServicio viajeServicio = new ViajeServicio();
-        Map<String, Object> resultado;
         
         BufferedReader reader = request.getReader();
-        Viaje viaje = gson.fromJson(reader, Viaje.class);
-        resultado = viajeServicio.saveViaje(viaje);
-        escribirJson(response, resultado);
+        
+        ViajeDTO viaje = gson.fromJson(reader, ViajeDTO.class);
+        ViajeDTO created = null;
+        
+        try {
+            created = servicio.save(viaje);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (created != null) {
+            response.getWriter().write(gson.toJson(created));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("No creado")));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
     
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP <code>DELETE</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -96,16 +129,49 @@ public class ViajeServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ViajeServicio viajeServicio = new ViajeServicio();
-        String idViajeStr = (String) request.getParameter("idViaje");
-        Map<String, Object> resultado = viajeServicio.eliminarViaje(idViajeStr);
-        escribirJson(response, resultado);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        
+        int id = Integer.parseInt(request.getParameter("id"));
+        ViajeDTO viajeDTO = new ViajeDTO();
+        viajeDTO.setId(id);
+        ViajeDTO eliminado = null;
+        try {
+            eliminado = servicio.delete(viajeDTO);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(ex.toString()));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (eliminado != null) {
+            response.getWriter().write(gson.toJson(eliminado));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("Viaje no encontrado")));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
     
-    private void escribirJson(HttpServletResponse response, Map<String, Object> resultado) throws IOException {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String json = gson.toJson(resultado);
-        response.setContentType("application/json");
-        response.getWriter().write(json);
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+    
+    class Mensaje {
+        private String mensaje;
+
+        public Mensaje(String mensaje) {
+            this.mensaje = mensaje;
+        }
+
+        public String getMensaje() {
+            return mensaje;
+        }
     }
 }

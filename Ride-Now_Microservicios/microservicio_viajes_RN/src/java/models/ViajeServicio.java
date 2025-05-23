@@ -4,12 +4,16 @@
  */
 package models;
 
+import com.ridenow.models.Locacion;
+import com.ridenow.models.Vehiculo;
 import com.ridenow.models.Viaje;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import models.ViajeDAO;
+import models.DAOs.ViajeDAO;
+import models.DTOs.ViajeDTO;
 
 /**
  *
@@ -22,64 +26,53 @@ public class ViajeServicio {
         repositorio = new ViajeDAO();
     }
     
-    public Map<String, Object> saveViaje(Viaje viaje){
-        Map<String, Object> resultado = new HashMap<>();
-        try {
-            Viaje rta = repositorio.create(viaje);
-            String mensaje = rta != null? "viaje guardado": "viaje NO guardado";
-            resultado.put("mensaje", mensaje);
-            resultado.put("resultado", "hecho");
-        } catch (SQLException | ClassNotFoundException ex) {
-            resultado.put("mensaje", ex.toString());
+    public ViajeDTO save(ViajeDTO viajeDTO) throws SQLException, ClassNotFoundException{
+        Viaje viaje = dtoToModel(viajeDTO);
+        viaje = repositorio.create(viaje);
+        return viaje != null? modelToDto(viaje): null;
+    }
+    
+    public List<ViajeDTO> all() throws SQLException, ClassNotFoundException {
+        List<Viaje> lista = repositorio.getAll();
+        List<ViajeDTO> resultado = new ArrayList<>();
+        for (Viaje viaje : lista) {
+            resultado.add(modelToDto(viaje));
         }
         return resultado;
     }
     
-    public Map<String, Object> listar() {
-        Map<String, Object> resultado = new HashMap<>();
-        List<Viaje> viajes;
-        try {
-            viajes = repositorio.getAll();
-            resultado.put("resultado", "hecho");
-            resultado.put("viajes", viajes);
-        } catch (SQLException | ClassNotFoundException ex) {
-            resultado.put("mensaje", ex.toString());
-        }
-        return resultado;
+    public ViajeDTO get(ViajeDTO viajeDTO) throws SQLException, ClassNotFoundException {
+        Viaje viaje = repositorio.get(viajeDTO.getId());
+        return viaje != null? modelToDto(viaje): null;
     }
     
-    public Map<String, Object> buscar(String idViajeStr) {
-        Map<String, Object> resultado = new HashMap<>();
-        if (idViajeStr == null) {
-            resultado.put("mensaje", "debe escrbir un id");
-            return resultado;
-        }
-        try {
-            int idViaje = Integer.parseInt(idViajeStr);
-            Viaje viaje = repositorio.get(idViaje);
-            resultado.put("viaje", viaje);
-            resultado.put("resultado", "hecho");
-        } catch (SQLException | NumberFormatException  | ClassNotFoundException ex) {
-            resultado.put("mensaje", ex.toString());
-        }
-        return resultado;
+    public ViajeDTO delete(ViajeDTO viajeDTO) throws SQLException, ClassNotFoundException {
+        boolean eliminado = repositorio.delete(viajeDTO.getId());
+        return eliminado? viajeDTO: null;
     }
     
-    public Map<String, Object> eliminarViaje(String idViajeStr) {
-        Map<String, Object> resultado = new HashMap<>();
-        if (idViajeStr == null) {
-            resultado.put("mensaje", "debe escrbir un id");
-            return resultado;
-        }
-        try {
-            int idViaje = Integer.parseInt(idViajeStr);
-            boolean rta = repositorio.delete(idViaje);
-            String mensaje = rta? "viaje elimindado": "no se encontro el viaje";
-            resultado.put("mensaje", mensaje);
-            resultado.put("resultado", "hecho");
-        } catch (SQLException | NumberFormatException  | ClassNotFoundException ex) {
-            resultado.put("mensaje", ex.toString());
-        }
-        return resultado;
+    private Viaje dtoToModel(ViajeDTO dto) {
+        return new Viaje(
+            dto.getId(),
+            dto.getHora(),
+            dto.getPrecio(),
+            dto.getTipo(),
+            dto.getFecha(),
+            new Locacion(dto.getIdLocacionOrigen()),
+            new Locacion(dto.getIdLocacionOrigen()),
+            new Vehiculo(dto.getIdVehiculo())
+        );
+    }
+
+    private ViajeDTO modelToDto(Viaje viaje) {
+        ViajeDTO dto = new ViajeDTO();
+        dto.setId(viaje.getId());
+        dto.setHora(viaje.getHora());
+        dto.setPrecio(viaje.getPrecio());
+        dto.setTipo(viaje.getTipo());
+        dto.setIdLocacionOrigen(viaje.getOrigen().getId());
+        dto.setIdLocacionDestino(viaje.getDestino().getId());
+        dto.setIdVehiculo(viaje.getVehiculo().getIdVehiculo());
+        return dto;
     }
 }

@@ -4,7 +4,7 @@
  */
 package controladores;
 
-import models.UsuarioDTO;
+import models.DTOs.UsuarioDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletConfig;
 import java.io.IOException;

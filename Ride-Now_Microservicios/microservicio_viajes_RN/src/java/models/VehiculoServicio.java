@@ -4,8 +4,8 @@
  */
 package models;
 
-import models.VehiculoDAO;
-import models.VehiculoDTO;
+import models.DAOs.VehiculoDAO;
+import models.DTOs.VehiculoDTO;
 import com.ridenow.models.PrestadorDeServicio;
 import com.ridenow.models.Vehiculo;
 import java.sql.SQLException;
