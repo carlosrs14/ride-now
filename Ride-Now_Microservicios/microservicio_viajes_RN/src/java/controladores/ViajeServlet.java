@@ -6,9 +6,6 @@ package controladores;
 
 import models.ViajeServicio;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.ridenow.models.Usuario;
-import com.ridenow.models.Viaje;
 import jakarta.servlet.ServletConfig;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -18,11 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.DTOs.ViajeDTO;
 
 /**

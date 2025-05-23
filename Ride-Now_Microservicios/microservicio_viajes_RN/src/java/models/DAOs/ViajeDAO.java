@@ -109,7 +109,12 @@ public class ViajeDAO implements DAO<Viaje> {
 
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "DELETE FROM viajes WHERE idviaje = ?";
+        Connection conn = Conexion.getConexion();
+        PreparedStatement statement = conn.prepareStatement(sql);
+
+        statement.setInt(1, id);
+        return statement.executeUpdate() > 0;
     }
 
     @Override
