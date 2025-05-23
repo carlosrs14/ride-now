@@ -4,6 +4,7 @@
  */
 package controladores;
 
+import models.VehiculoServicio;
 import models.VehiculoDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletConfig;

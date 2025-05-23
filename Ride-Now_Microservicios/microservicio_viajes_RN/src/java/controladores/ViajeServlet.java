@@ -4,6 +4,7 @@
  */
 package controladores;
 
+import models.ViajeServicio;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ridenow.models.Viaje;
