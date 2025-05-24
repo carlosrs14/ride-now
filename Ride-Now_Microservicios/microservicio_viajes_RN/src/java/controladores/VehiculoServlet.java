@@ -177,7 +177,7 @@ public class VehiculoServlet extends HttpServlet {
             actualizado = servicio.update(vehiculoDTO);
         } catch (SQLException | ClassNotFoundException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             return;
         }
         if(actualizado != null) {

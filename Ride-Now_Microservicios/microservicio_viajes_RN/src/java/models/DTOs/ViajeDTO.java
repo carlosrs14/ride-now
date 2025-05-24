@@ -23,7 +23,7 @@ public class ViajeDTO {
     public ViajeDTO() {
     }
 
-    public ViajeDTO(int id, int hora, float precio, Date fecha, String tipo, int idLocacionOrigen, int idLocaionDestino, int idVehiculo) {
+    public ViajeDTO(int id, int hora, float precio, Date fecha, String tipo, int idLocacionOrigen, int idLocacionDestino, int idVehiculo) {
         this.id = id;
         this.hora = hora;
         this.precio = precio;
