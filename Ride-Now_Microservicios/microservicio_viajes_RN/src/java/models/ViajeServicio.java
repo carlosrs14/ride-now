@@ -9,9 +9,7 @@ import com.ridenow.models.Vehiculo;
 import com.ridenow.models.Viaje;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import models.DAOs.ViajeDAO;
 import models.DTOs.ViajeDTO;
 

@@ -5,92 +5,161 @@
 package controladores;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.ridenow.models.Reserva;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import servicios.ReservaServicio;
+import java.sql.SQLException;
+import java.util.List;
+import modelos.ReservaServicio;
+import models.DTOs.ReservaDTO;
 
 /**
  *
- * @author xlancet
+ * @author Rossimar
  */
-@WebServlet(name = "ReservaServlet", urlPatterns = {"/ReservaServlet"})
-public class ReservaServlet extends HttpServlet {
-      // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        ReservaServicio reservaServicio = new ReservaServicio();
-        Map<String, Object> resultado;
-        String idReservaStr = request.getParameter("idReserva");
-        
-        if(idReservaStr == null) {
-            resultado = new HashMap<>();
-            resultado.put("mensaje", "Debe proporcionar el id");
-        } else {
-            resultado = reservaServicio.buscar(idReservaStr);
-        }
-        escribirJson(response, resultado);  
-    }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+public class ReservaServlet extends HttpServlet {
+    private ReservaServicio servicio;
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        servicio = new ReservaServicio();
+    }
+    @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        
+        String idReserva = request.getParameter("id");
+
+        if (idReserva == null) {
+            try {
+                List<ReservaDTO> reservas = servicio.getAll();
+                response.getWriter().write(gson.toJson(reservas));
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
+            } catch (SQLException | ClassNotFoundException ex) {
+                response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        }
+        int id = Integer.parseInt(idReserva);
+        ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId(id);
+        try {
+            ReservaDTO resultado = servicio.get(reservaDTO);
+            response.getWriter().write(gson.toJson(resultado));
+            response.setStatus(HttpServletResponse.SC_OK);
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+        
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
-        ReservaServicio reservaServicio = new ReservaServicio();
-        Map<String, Object> resultado;
         
         BufferedReader reader = request.getReader();
-        Reserva reserva = gson.fromJson(reader, Reserva.class);
-        resultado = reservaServicio.saveReserva(reserva);
-        escribirJson(response, resultado);
+        
+        ReservaDTO reserva = gson.fromJson(reader, ReservaDTO.class);
+        ReservaDTO created = null;
+        
+        try {
+            created = servicio.save(reserva);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (created != null) {
+            response.getWriter().write(gson.toJson(created));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("La reserva no fue creada")));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
-    
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    Gson gson = new Gson();
+
+    BufferedReader reader = request.getReader();
+    ReservaDTO reserva = gson.fromJson(reader, ReservaDTO.class);
+
+    ReservaDTO actualizada = null;
+
+    try {
+        actualizada = servicio.update(reserva);
+    } catch (SQLException | ClassNotFoundException ex) {
+        response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+    }
+
+    if (actualizada != null) {
+        response.getWriter().write(gson.toJson(actualizada));
+        response.setStatus(HttpServletResponse.SC_OK);
+    } else {
+        response.getWriter().write(gson.toJson(new Mensaje("No se pudo actualizar la reserva")));
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    }
+ }
+
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ReservaServicio reservaServicio = new ReservaServicio();
-        String idReservaStr = (String) request.getParameter("idReserva");
-        Map<String, Object> resultado = reservaServicio.eliminar(idReservaStr);
-        escribirJson(response, resultado);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+        
+        int id = Integer.parseInt(request.getParameter("id"));
+        ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId(id);
+        ReservaDTO eliminado = null;
+        try {
+            eliminado = servicio.delete(reservaDTO);
+        } catch (SQLException | ClassNotFoundException ex) {
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+        if (eliminado != null) {
+            response.getWriter().write(gson.toJson(eliminado));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.getWriter().write(gson.toJson(new Mensaje("Reserva no encontrada")));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+    @Override
+    public String getServletInfo() {
+        return "Short description";
     }
     
-    private void escribirJson(HttpServletResponse response, Map<String, Object> resultado) throws IOException {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String json = gson.toJson(resultado);
-        response.setContentType("application/json");
-        response.getWriter().write(json);
+    class Mensaje {
+        private String mensaje;
+
+        public Mensaje(String mensaje) {
+            this.mensaje = mensaje;
+        }
+
+        public String getMensaje() {
+            return mensaje;
+        }
     }
 }
