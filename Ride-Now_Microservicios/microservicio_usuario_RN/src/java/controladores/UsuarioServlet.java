@@ -72,7 +72,7 @@ public class UsuarioServlet extends HttpServlet {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(new Mensaje("Error al obtener usuarios")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -99,7 +99,7 @@ public class UsuarioServlet extends HttpServlet {
         try {
             created = servicio.save(usuario);
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
@@ -133,7 +133,7 @@ public class UsuarioServlet extends HttpServlet {
         try {
             eliminado = servicio.delete(usuarioDTO);
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(ex.toString()));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
@@ -168,7 +168,7 @@ public class UsuarioServlet extends HttpServlet {
             actualizado = servicio.update(usuarioDTO);
         } catch (SQLException | ClassNotFoundException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             return;
         }
         if (actualizado != null) {

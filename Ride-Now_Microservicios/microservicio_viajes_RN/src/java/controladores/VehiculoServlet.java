@@ -82,7 +82,7 @@ public class VehiculoServlet extends HttpServlet {
             }
             
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -108,7 +108,7 @@ public class VehiculoServlet extends HttpServlet {
         try {
             created = servicio.save(vehiculo);
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
@@ -142,7 +142,7 @@ public class VehiculoServlet extends HttpServlet {
         try {
             eliminado = servicio.delete(vehiculoDTO);
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(ex.toString()));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }

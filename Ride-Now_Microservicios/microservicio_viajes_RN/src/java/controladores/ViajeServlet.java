@@ -57,7 +57,7 @@ public class ViajeServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_OK);
                 return;
             } catch (SQLException | ClassNotFoundException ex) {
-                response.getWriter().write(gson.toJson(new Mensaje("Error de la base de datos")));
+                response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
@@ -70,7 +70,7 @@ public class ViajeServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
             
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(new Mensaje("Error de la base de datos")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
@@ -98,7 +98,7 @@ public class ViajeServlet extends HttpServlet {
         try {
             created = servicio.save(viaje);
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(new Mensaje("Error del servidor")));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
@@ -133,7 +133,7 @@ public class ViajeServlet extends HttpServlet {
         try {
             eliminado = servicio.delete(viajeDTO);
         } catch (SQLException | ClassNotFoundException ex) {
-            response.getWriter().write(gson.toJson(ex.toString()));
+            response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }

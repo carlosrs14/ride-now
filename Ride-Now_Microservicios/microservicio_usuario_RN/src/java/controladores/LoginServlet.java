@@ -70,7 +70,7 @@ public class LoginServlet extends HttpServlet {
         try {
             usuario = servicio.login(correo, password);
         } catch (SQLException | ClassNotFoundException ex) {
-            String json = gson.toJson(new LoginServlet.Mensaje("Error desde la base de datos"));
+            String json = gson.toJson(new Mensaje(ex.getMessage()));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write(json);
         }
@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(json);
         } else {
-            String json = gson.toJson(new LoginServlet.Mensaje("Login fallido"));
+            String json = gson.toJson(new Mensaje("Login fallido"));
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(json);
         }
