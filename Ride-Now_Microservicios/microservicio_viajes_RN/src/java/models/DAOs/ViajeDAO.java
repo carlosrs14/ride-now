@@ -35,7 +35,7 @@ public class ViajeDAO implements DAO<Viaje> {
                 + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING idviaje";
         Connection conexion = Conexion.getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
-        statement.setDate(1, (Date) g.getFecha());
+        statement.setDate(1, new Date(g.getFecha().getTime()));
         statement.setInt(2, g.getHora());
         statement.setString(3, g.getTipo());
         statement.setFloat(4, g.getPrecio());

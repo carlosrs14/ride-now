@@ -73,6 +73,7 @@ public class ViajeServicio {
         dto.setIdLocacionOrigen(viaje.getOrigen().getId());
         dto.setIdLocacionDestino(viaje.getDestino().getId());
         dto.setIdVehiculo(viaje.getVehiculo().getIdVehiculo());
+        dto.setFecha(viaje.getFecha());
         return dto;
     }
 }
