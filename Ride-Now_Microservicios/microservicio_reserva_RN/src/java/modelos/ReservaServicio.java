@@ -53,6 +53,14 @@ public class ReservaServicio {
         }
         return reservas;
     }
+    public List<ReservaDTO> filterByOwner(int id) throws SQLException, ClassNotFoundException {
+        List<Reserva> lista = repositorio.filterByOwner(id);
+        List<ReservaDTO> reservas = new ArrayList<>();
+        for(Reserva reserva: lista) {
+            reservas.add(modelToDto(reserva));
+        }
+        return reservas;
+    }
 
     private Reserva dtoToModel(ReservaDTO dto) {
         return new Reserva(

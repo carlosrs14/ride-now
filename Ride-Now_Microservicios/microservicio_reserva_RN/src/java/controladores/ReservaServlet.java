@@ -7,6 +7,7 @@ package controladores;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +22,7 @@ import models.DTOs.ReservaDTO;
  *
  * @author Rossimar
  */
-
+@WebServlet(name = "ReservaServlet", urlPatterns = {"/ReservaServlet"})
 public class ReservaServlet extends HttpServlet {
     private ReservaServicio servicio;
     
@@ -37,20 +38,35 @@ public class ReservaServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
         
-        String idReserva = request.getParameter("id");
-
-        if (idReserva == null) {
+        String idOwnerParam = request.getParameter("idowner");
+        
+        if (idOwnerParam != null) {
             try {
-                List<ReservaDTO> reservas = servicio.getAll();
+                int idowner = Integer.parseInt(idOwnerParam);
+                List<ReservaDTO> reservas = servicio.filterByOwner(idowner);
                 response.getWriter().write(gson.toJson(reservas));
                 response.setStatus(HttpServletResponse.SC_OK);
-                return;
             } catch (SQLException | ClassNotFoundException ex) {
                 response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+            return;
         }
-        int id = Integer.parseInt(idReserva);
+        
+        String idReservaParam = request.getParameter("id");
+        
+        if (idReservaParam == null) {
+            try {
+                List<ReservaDTO> reservas = servicio.getAll();
+                response.getWriter().write(gson.toJson(reservas));
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (SQLException | ClassNotFoundException ex) {
+                response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            return;
+        }
+        int id = Integer.parseInt(idReservaParam);
         ReservaDTO reservaDTO = new ReservaDTO();
         reservaDTO.setId(id);
         try {
