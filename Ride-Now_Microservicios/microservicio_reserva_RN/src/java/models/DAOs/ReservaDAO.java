@@ -28,13 +28,13 @@ public class ReservaDAO implements DAO<Reserva> {
     @Override
     public Reserva create(Reserva g) throws SQLException, ClassNotFoundException {
         String consultaSQL = "INSERT INTO reservas (fechareserva, idcliente, idviaje) " + 
-                             "VALUES(?, ?, ?);";
+                             "VALUES(?, ?, ?) RETURNING idreserva;";
         Connection conexion = Conexion.getConexion();
         PreparedStatement statement = conexion.prepareStatement(consultaSQL);
-        
-        statement.setDate(1, Date.valueOf(g.getFecha()));
+        Date fecha = Date.valueOf(g.getFecha());
+        statement.setDate(1, fecha);
         statement.setInt(2, g.getCliente().getId());
-        statement.setInt(4, g.getViaje().getId());
+        statement.setInt(3, g.getViaje().getId());
         
         ResultSet result = statement.executeQuery();
         if(result.next()) {
@@ -48,7 +48,7 @@ public class ReservaDAO implements DAO<Reserva> {
 
     @Override
     public Reserva get(int id) throws SQLException, ClassNotFoundException {
-       String consultaSQL = "SELECT * FROM reservas WHERE idreserva = ? ";
+       String consultaSQL = "SELECT * FROM reservas WHERE idreserva = ?;";
         
         Connection conexion = Conexion.getConexion();
         PreparedStatement statement = conexion.prepareStatement(consultaSQL);
@@ -94,12 +94,14 @@ public class ReservaDAO implements DAO<Reserva> {
 
     @Override
     public boolean update(Reserva g) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE reservas SET fechareserva = ?, idcliente = ?, idviaje = ? WHERE idreserva = ?";
+        String sql = "UPDATE reservas SET fechareserva = ?, idcliente = ?, idviaje = ? WHERE idreserva = ?;";
         Connection conexion = Conexion.getConexion();
         PreparedStatement stmt = conexion.prepareStatement(sql);
-        stmt.setString(1, g.getFecha());
+        Date fecha = Date.valueOf(g.getFecha());
+        stmt.setDate(1, fecha);
         stmt.setInt(2, g.getCliente().getId());
         stmt.setInt(3, g.getViaje().getId());
+        stmt.setInt(4, g.getId()); 
         
         int filas = stmt.executeUpdate();
         conexion.close();
@@ -119,7 +121,7 @@ public class ReservaDAO implements DAO<Reserva> {
     @Override
     public List<Reserva> filterByOwner(int id) throws SQLException, ClassNotFoundException {
         List<Reserva> reservas = new ArrayList<>();
-        String sql = "SELECT * FROM reservas WHERE idcliente = ?";
+        String sql = "SELECT * FROM reservas WHERE idcliente = ?;";
         Connection conexion = Conexion.getConexion();
         PreparedStatement stmt = conexion.prepareStatement(sql);
         stmt.setInt(1, id);
