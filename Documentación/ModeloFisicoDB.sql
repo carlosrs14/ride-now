@@ -97,18 +97,6 @@ CREATE TABLE Recargas (
         PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
 );
 
-CREATE TABLE Resenas (
-    IDResena SERIAL PRIMARY KEY,
-    Calificacion INT CHECK (Calificacion BETWEEN 1 AND 5),
-    Comentario TEXT,
-    FechaResena TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    IDCliente INT NOT NULL,
-    IDPrestadorDeServicio INT NOT NULL,
-    FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
-    FOREIGN KEY (IDPrestadorDeServicio) REFERENCES
-        PrestadoresDeServicio(IDPrestadorDeServicio) ON DELETE CASCADE
-);
-
 CREATE TABLE Denuncias (
     IDResena SERIAL PRIMARY KEY,
     Motivo TEXT NOT NULL,
