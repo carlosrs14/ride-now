@@ -81,7 +81,7 @@ CREATE TABLE Reservas (
     IDReserva SERIAL PRIMARY KEY,
     FechaReserva DATE NOT NULL,
     IDCliente INT NOT NULL,
-    IDPago INT NOT NULL,
+    IDPago INT NULL,
 	IDViaje INT NOT NULL,
 	FOREIGN KEY (IDCliente) REFERENCES Clientes(IDCliente) ON DELETE CASCADE,
     FOREIGN KEY (IDPago) REFERENCES Pagos(IDPago),
