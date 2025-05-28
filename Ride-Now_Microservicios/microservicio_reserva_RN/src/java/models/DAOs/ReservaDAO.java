@@ -31,7 +31,7 @@ public class ReservaDAO implements DAO<Reserva> {
                              "VALUES(?, ?, ?) RETURNING idreserva;";
         Connection conexion = Conexion.getConexion();
         PreparedStatement statement = conexion.prepareStatement(consultaSQL);
-        Date fecha = Date.valueOf(g.getFecha());
+        Date fecha = Date.valueOf(g.getFecha().split("T")[0]);
         statement.setDate(1, fecha);
         statement.setInt(2, g.getCliente().getId());
         statement.setInt(3, g.getViaje().getId());

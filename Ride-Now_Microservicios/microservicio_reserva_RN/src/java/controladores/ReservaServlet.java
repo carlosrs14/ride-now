@@ -143,7 +143,7 @@ public class ReservaServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
         
-        int id = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("idReserva"));
         ReservaDTO reservaDTO = new ReservaDTO();
         reservaDTO.setId(id);
         ReservaDTO eliminado = null;
