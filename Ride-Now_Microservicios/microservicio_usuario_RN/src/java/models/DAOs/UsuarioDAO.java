@@ -28,8 +28,8 @@ public class UsuarioDAO implements DAO<Usuario> {
 
     @Override
     public Usuario create(Usuario usuario) throws SQLException, ClassNotFoundException {
-        String consultaUsuarioSQL = "INSERT INTO usuarios (nombre, apellido, email, fechanacimiento, telefono, password, tipo)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING idusuario;";
+        String consultaUsuarioSQL = "INSERT INTO usuarios (nombre, apellido, email, telefono, password, tipo)" +
+                " VALUES (?, ?, ?, ?, ?, ?) RETURNING idusuario;";
         Connection conexion = Conexion.getConexion();
         conexion.setAutoCommit(false);
         PreparedStatement statementUsuario = conexion.prepareStatement(consultaUsuarioSQL);
@@ -37,10 +37,10 @@ public class UsuarioDAO implements DAO<Usuario> {
         statementUsuario.setString(1, usuario.getNombre());
         statementUsuario.setString(2,  usuario.getApellido());
         statementUsuario.setString(3, usuario.getCorreo());
-        statementUsuario.setDate(4, Date.valueOf(usuario.getFechaNacimiento()));
-        statementUsuario.setString(5, usuario.getTelefono());
-        statementUsuario.setString(6, usuario.getPassword());
-        statementUsuario.setString(7, usuario.getTipo());
+        // statementUsuario.setDate(4, Date.valueOf(usuario.getFechaNacimiento()));
+        statementUsuario.setString(4, usuario.getTelefono());
+        statementUsuario.setString(5, usuario.getPassword());
+        statementUsuario.setString(6, usuario.getTipo());
 
         ResultSet result = statementUsuario.executeQuery();
 
@@ -142,17 +142,17 @@ public class UsuarioDAO implements DAO<Usuario> {
     @Override
     public boolean update(Usuario usuario) throws SQLException, ClassNotFoundException {
         Connection conexion = Conexion.getConexion();
-        String consulta = "UPDATE usuarios SET nombre = ?, apellido = ?, email = ?, fechanacimiento = ?, telefono = ?, password = ? "
+        String consulta = "UPDATE usuarios SET nombre = ?, apellido = ?, email = ?, telefono = ? "
                 + "WHERE idusuario = ?";
         PreparedStatement stmt = conexion.prepareStatement(consulta);
 
         stmt.setString(1, usuario.getNombre());
         stmt.setString(2, usuario.getApellido());
         stmt.setString(3, usuario.getCorreo());
-        stmt.setDate(4, Date.valueOf(usuario.getFechaNacimiento()));
-        stmt.setString(5, usuario.getTelefono());
-        stmt.setString(6, usuario.getPassword());
-        stmt.setInt(7, usuario.getId());
+        //stmt.setDate(4, Date.valueOf(usuario.getFechaNacimiento()));
+        stmt.setString(4, usuario.getTelefono());
+        //stmt.setString(5, usuario.getPassword());
+        stmt.setInt(5, usuario.getId());
 
         int filas = stmt.executeUpdate();
         conexion.close();
