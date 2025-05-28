@@ -27,7 +27,7 @@ public class DenunciaDAO implements DAO<Denuncia> {
         String sql = "INSERT INTO denuncias "
                 + "(fecha, descripcion, estado, idcliente, idprestadordeservicio) "
                 + "VALUES (?, ?, ?, ?, ?) RETURNING iddenuncia";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
         statement.setDate(1, Date.valueOf(denuncia.getFecha()));
         statement.setString(2, denuncia.getDescripcion());
@@ -47,7 +47,7 @@ public class DenunciaDAO implements DAO<Denuncia> {
     @Override
     public Denuncia get(int id) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM denuncias WHERE iddenuncia = ?;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
 
         statement.setInt(1, id);
@@ -71,7 +71,7 @@ public class DenunciaDAO implements DAO<Denuncia> {
         List<Denuncia> denuncias = new ArrayList<>();
         
         String sql = "SELECT * FROM denuncias;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
         ResultSet result = statement.executeQuery();
 
@@ -93,7 +93,7 @@ public class DenunciaDAO implements DAO<Denuncia> {
     @Override
     public boolean update(Denuncia denuncia) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE denuncias SET descripcion = ?, estado = ? WHERE iddenuncia = ?";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
 
         statement.setString(1, denuncia.getDescripcion());
@@ -107,7 +107,7 @@ public class DenunciaDAO implements DAO<Denuncia> {
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM denuncias WHERE iddenuncia = ?";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
 
         statement.setInt(1, id);
@@ -119,7 +119,7 @@ public class DenunciaDAO implements DAO<Denuncia> {
         List<Denuncia> denuncias = new ArrayList<>();
         
         String sql = "SELECT * FROM denuncias WHERE idcliente = ?;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
         statement.setInt(1, idCliente);
         ResultSet result = statement.executeQuery();
