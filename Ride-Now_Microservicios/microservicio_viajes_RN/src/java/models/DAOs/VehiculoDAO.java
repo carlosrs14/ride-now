@@ -26,8 +26,8 @@ public class VehiculoDAO implements DAO<Vehiculo> {
         String sql = "INSERT INTO vehiculos "
                 + "(marca, modelo, placa, tieneaire, color, capacidad, idPrestadordeservicio) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING idvehiculo";
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
         statement.setString(1, g.getMarca());
         statement.setInt(2, g.getModelo());
         statement.setString(3, g.getPlaca());
@@ -48,8 +48,8 @@ public class VehiculoDAO implements DAO<Vehiculo> {
     @Override
     public Vehiculo get(int id) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM vehiculos WHERE idvehiculo = ?;";
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setInt(1, id);
         ResultSet result = statement.executeQuery();
@@ -73,8 +73,8 @@ public class VehiculoDAO implements DAO<Vehiculo> {
     public List<Vehiculo> getAll() throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM vehiculos;";
         List<Vehiculo> vehiculos = new ArrayList<>();
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         ResultSet result = statement.executeQuery();
 
@@ -99,8 +99,8 @@ public class VehiculoDAO implements DAO<Vehiculo> {
                 + "SET marca = ?, modelo = ?, placa = ?, tieneaire = ?, "
                 + "color = ?, capacidad = ?, idprestadordeservicio = ? "
                 + "WHERE idvehiculo = ?;";
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setString(1, g.getMarca());
         statement.setInt(2, g.getModelo());
@@ -117,8 +117,8 @@ public class VehiculoDAO implements DAO<Vehiculo> {
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM vehiculos WHERE idvehiculo = ?";
-        Connection conn = Conexion.getConexion();
-        PreparedStatement statement = conn.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setInt(1, id);
         return statement.executeUpdate() > 0;
@@ -129,8 +129,8 @@ public class VehiculoDAO implements DAO<Vehiculo> {
         List<Vehiculo> vehiculos = new ArrayList<>();
         String sql = "SELECT * FROM vehiculos WHERE idprestadordeservicio = ?";
 
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setInt(1, id);
         ResultSet rs = statement.executeQuery();

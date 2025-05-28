@@ -11,6 +11,7 @@ import com.ridenow.models.Vehiculo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import models.DAOs.DAOFactory;
 
 /**
  *
@@ -20,7 +21,7 @@ public class VehiculoServicio {
     private VehiculoDAO repositorio;
 
     public VehiculoServicio() {
-        repositorio = new VehiculoDAO();
+        repositorio = DAOFactory.getVehiculoDAO();
     }
     
     public VehiculoDTO save(VehiculoDTO vehiculoDTO) throws SQLException, ClassNotFoundException {

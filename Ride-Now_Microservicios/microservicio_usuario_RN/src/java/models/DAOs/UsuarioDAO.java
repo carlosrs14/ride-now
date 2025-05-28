@@ -30,7 +30,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     public Usuario create(Usuario usuario) throws SQLException, ClassNotFoundException {
         String consultaUsuarioSQL = "INSERT INTO usuarios (nombre, apellido, email, telefono, password, tipo)" +
                 " VALUES (?, ?, ?, ?, ?, ?) RETURNING idusuario;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         conexion.setAutoCommit(false);
         PreparedStatement statementUsuario = conexion.prepareStatement(consultaUsuarioSQL);
 
@@ -82,7 +82,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     @Override
     public Usuario get(int id) throws SQLException, ClassNotFoundException{
         Usuario usuario = null;
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         String consulta = "SELECT * FROM usuarios WHERE idusuario = ?";
         PreparedStatement stmt = conexion.prepareStatement(consulta);
         stmt.setInt(1, id);
@@ -111,7 +111,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     public List<Usuario> getAll() throws SQLException, ClassNotFoundException {
         List<Usuario> usuarios = new ArrayList<>();
 
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         String consulta = "SELECT * FROM usuarios";
         PreparedStatement stmt = conexion.prepareStatement(consulta);
         ResultSet result = stmt.executeQuery();
@@ -141,7 +141,7 @@ public class UsuarioDAO implements DAO<Usuario> {
 
     @Override
     public boolean update(Usuario usuario) throws SQLException, ClassNotFoundException {
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         String consulta = "UPDATE usuarios SET nombre = ?, apellido = ?, email = ?, telefono = ? "
                 + "WHERE idusuario = ?";
         PreparedStatement stmt = conexion.prepareStatement(consulta);
@@ -162,7 +162,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String eliminarUsuario = "DELETE FROM usuarios WHERE idusuario = ?";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement stmt = conexion.prepareStatement(eliminarUsuario);
         stmt.setInt(1, id);
 
@@ -182,7 +182,7 @@ public class UsuarioDAO implements DAO<Usuario> {
         String consultaSQL = "SELECT idusuario, nombre, apellido, fechanacimiento, telefono, tipo "
                 + "FROM usuarios "
                 + "WHERE email = ?;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(consultaSQL);
         statement.setString(1, email);
 
@@ -208,7 +208,7 @@ public class UsuarioDAO implements DAO<Usuario> {
         private boolean validarLogin(String email, String password) throws SQLException, ClassNotFoundException {
         String consultaQL = "SELECT email, password FROM usuarios WHERE (email = ?) " +
                 " AND (password = ?);";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
 
         PreparedStatement statement = conexion.prepareStatement(consultaQL);
         statement.setString(1, email);

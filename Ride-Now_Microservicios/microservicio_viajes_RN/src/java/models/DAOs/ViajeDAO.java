@@ -34,8 +34,8 @@ public class ViajeDAO implements DAO<Viaje> {
         String sql = "INSERT INTO viajes "
                 + "(fecha, hora, tipo, precio, idvehiculo, idlocacionorigen, idlocaciondestino) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING idviaje";
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
         statement.setDate(1, new Date(g.getFecha().getTime()));
         statement.setInt(2, g.getHora());
         statement.setString(3, g.getTipo());
@@ -56,8 +56,8 @@ public class ViajeDAO implements DAO<Viaje> {
     @Override
     public Viaje get(int id) throws SQLException, ClassNotFoundException {
         String sql = "SELECT * FROM viajes WHERE idviaje = ?;";
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setInt(1, id);
         ResultSet result = statement.executeQuery();
@@ -82,8 +82,8 @@ public class ViajeDAO implements DAO<Viaje> {
         List<Viaje> viajes = new ArrayList<>();
         
         String sql = "SELECT * FROM viajes;";
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
         ResultSet result = statement.executeQuery();
 
         while (result.next()) {
@@ -111,8 +111,8 @@ public class ViajeDAO implements DAO<Viaje> {
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM viajes WHERE idviaje = ?";
-        Connection conn = Conexion.getConexion();
-        PreparedStatement statement = conn.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();;
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setInt(1, id);
         return statement.executeUpdate() > 0;
@@ -126,8 +126,8 @@ public class ViajeDAO implements DAO<Viaje> {
                 + "INNER JOIN viajes USING(idvehiculo) "
                 + "WHERE idprestadordeservicio = ?";
 
-        Connection conexion = Conexion.getConexion();
-        PreparedStatement statement = conexion.prepareStatement(sql);
+        Connection con = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = con.prepareStatement(sql);
 
         statement.setInt(1, id);
         ResultSet rs = statement.executeQuery();

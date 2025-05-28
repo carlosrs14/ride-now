@@ -29,7 +29,7 @@ public class ReservaDAO implements DAO<Reserva> {
     public Reserva create(Reserva g) throws SQLException, ClassNotFoundException {
         String consultaSQL = "INSERT INTO reservas (fechareserva, idcliente, idviaje) " + 
                              "VALUES(?, ?, ?) RETURNING idreserva;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(consultaSQL);
         Date fecha = Date.valueOf(g.getFecha().split("T")[0]);
         statement.setDate(1, fecha);
@@ -50,7 +50,7 @@ public class ReservaDAO implements DAO<Reserva> {
     public Reserva get(int id) throws SQLException, ClassNotFoundException {
        String consultaSQL = "SELECT * FROM reservas WHERE idreserva = ?;";
         
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(consultaSQL);
         statement.setInt(1, id);
         
@@ -73,7 +73,7 @@ public class ReservaDAO implements DAO<Reserva> {
     public List<Reserva> getAll() throws SQLException, ClassNotFoundException {
         List<Reserva> reservas = new ArrayList<>();
         String sql = "SELECT * FROM reservas;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement statement = conexion.prepareStatement(sql);
         ResultSet result = statement.executeQuery();
         while(result.next()) {
@@ -95,7 +95,7 @@ public class ReservaDAO implements DAO<Reserva> {
     @Override
     public boolean update(Reserva g) throws SQLException, ClassNotFoundException {
         String sql = "UPDATE reservas SET fechareserva = ?, idcliente = ?, idviaje = ? WHERE idreserva = ?;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement stmt = conexion.prepareStatement(sql);
         Date fecha = Date.valueOf(g.getFecha());
         stmt.setDate(1, fecha);
@@ -111,8 +111,8 @@ public class ReservaDAO implements DAO<Reserva> {
     @Override
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
         String sql = "DELETE FROM reservas WHERE idreserva = ?";
-        Connection conn = Conexion.getConexion();
-        PreparedStatement statement = conn.prepareStatement(sql);
+        Connection conexion = Conexion.getInstancia().getConexion();
+        PreparedStatement statement = conexion.prepareStatement(sql);
         
         statement.setInt(1, id);
         return statement.executeUpdate() > 0;
@@ -122,7 +122,7 @@ public class ReservaDAO implements DAO<Reserva> {
     public List<Reserva> filterByOwner(int id) throws SQLException, ClassNotFoundException {
         List<Reserva> reservas = new ArrayList<>();
         String sql = "SELECT * FROM reservas WHERE idcliente = ?;";
-        Connection conexion = Conexion.getConexion();
+        Connection conexion = Conexion.getInstancia().getConexion();
         PreparedStatement stmt = conexion.prepareStatement(sql);
         stmt.setInt(1, id);
         ResultSet result = stmt.executeQuery();
