@@ -169,7 +169,37 @@ public class UsuarioDAO implements DAO<Usuario> {
         int filas = stmt.executeUpdate();
         conexion.close();
         return filas > 0;
+    }
+    
+    public Usuario getByViaje(int idViaje) throws SQLException, ClassNotFoundException {
+        Usuario usuario = null;
+        String consultaSQL = "SELECT u.idusuario, u.nombre, u.apellido, u.tipo, u.email, u.fechanacimiento, u.telefono "
+                + "FROM usuarios u "
+                + "INNER JOIN prestadoresdeservicio pds ON u.idusuario = pds.idprestadordeservicio "
+                + "INNER JOIN vehiculos v ON v.idprestadordeservicio = pds.idprestadordeservicio "
+                + "INNER JOIN viajes vj ON vj.idvehiculo = v.idvehiculo "
+                + "WHERE vj.idviaje = ?;";
 
+        Connection conn = Conexion.getInstancia().getConexion();
+        PreparedStatement stmt = conn.prepareStatement(consultaSQL); 
+
+        stmt.setInt(1, idViaje);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            usuario = new PrestadorDeServicio(
+                rs.getInt("idusuario"),
+                rs.getString("fechanacimiento"),
+                rs.getString("nombre"),
+                rs.getString("apellido"),
+                rs.getString("tipo"),
+                rs.getString("telefono"),
+                rs.getString("email"),
+                "",
+                0
+            );
+        }
+            
+        return usuario;
     }
     
     public Usuario login(String email, String password) throws SQLException, ClassNotFoundException {
@@ -205,7 +235,8 @@ public class UsuarioDAO implements DAO<Usuario> {
         }
         return usuario;
     }
-        private boolean validarLogin(String email, String password) throws SQLException, ClassNotFoundException {
+    
+    private boolean validarLogin(String email, String password) throws SQLException, ClassNotFoundException {
         String consultaQL = "SELECT email, password FROM usuarios WHERE (email = ?) " +
                 " AND (password = ?);";
         Connection conexion = Conexion.getInstancia().getConexion();

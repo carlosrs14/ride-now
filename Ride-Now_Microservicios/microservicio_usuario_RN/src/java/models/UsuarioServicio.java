@@ -62,6 +62,11 @@ public class UsuarioServicio {
         return eliminado? usuarioDTO: null;
     }
     
+    public UsuarioDTO getByViaje(int idViaje) throws SQLException, ClassNotFoundException {
+        Usuario usuario = repositorio.getByViaje(idViaje);
+        return usuario != null? modelToDto(usuario): null;
+    }
+    
     private Usuario dtoToModel(UsuarioDTO dto) {
         Usuario usuario;
         switch (dto.getTipo()) {
