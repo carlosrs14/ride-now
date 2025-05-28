@@ -12,6 +12,7 @@ import com.ridenow.models.Viaje;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import models.DAOs.DAOFactory;
 import models.DAOs.ViajeDAO;
 import models.DTOs.ViajeDTO;
 
@@ -23,7 +24,7 @@ public class ViajeServicio {
     private ViajeDAO repositorio;
 
     public ViajeServicio() {
-        repositorio = new ViajeDAO();
+        repositorio = DAOFactory.getViajeDAO();
     }
     
     public ViajeDTO save(ViajeDTO viajeDTO) throws SQLException, ClassNotFoundException{
