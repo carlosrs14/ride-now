@@ -7,6 +7,7 @@ package models.DAOs;
 import models.DAOs.DAO;
 import accesodatos.Conexion;
 import com.ridenow.models.Locacion;
+import com.ridenow.models.PrestadorDeServicio;
 import com.ridenow.models.Vehiculo;
 import com.ridenow.models.Viaje;
 import java.sql.Connection;
@@ -119,6 +120,31 @@ public class ViajeDAO implements DAO<Viaje> {
 
     @Override
     public List<Viaje> filterByOwner(int id) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Viaje> viajes = new ArrayList<>();
+        String sql = "SELECT * FROM prestadoresdeservicio "
+                + "INNER JOIN vehiculos USING(idprestadordeservicio) "
+                + "INNER JOIN viajes USING(idvehiculo) "
+                + "WHERE idprestadordeservicio = ?";
+
+        Connection conexion = Conexion.getConexion();
+        PreparedStatement statement = conexion.prepareStatement(sql);
+
+        statement.setInt(1, id);
+        ResultSet rs = statement.executeQuery();
+
+        while (rs.next()) {
+            Viaje v = new Viaje(
+                rs.getInt("idviaje"),
+                rs.getInt("hora"),
+                rs.getFloat("precio"),
+                rs.getString("tipo"),
+                rs.getDate("fecha"),
+                new Locacion(rs.getInt("idlocacionorigen")),
+                new Locacion(rs.getInt("idlocaciondestino")),
+                new Vehiculo(rs.getInt("idvehiculo"))
+            );
+            viajes.add(v);
+        }
+        return viajes;
     }
 }
