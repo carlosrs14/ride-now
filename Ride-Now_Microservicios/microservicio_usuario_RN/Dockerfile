@@ -1,5 +1,5 @@
 FROM tomcat:11.0
-COPY dist/microservicio_usuario_RN.war /usr/local/tomcat/webapps/usuarios.war
+COPY dist/microservicio_usuario_RN.war /usr/local/tomcat/webapps/usuario.war
 
 # Elimina las apps por defecto de Tomcat (opcional)
 #RUN rm -rf /usr/local/tomcat/webapps/*
