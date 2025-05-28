@@ -5,6 +5,8 @@
 package models;
 
 import com.ridenow.models.Locacion;
+import com.ridenow.models.PrestadorDeServicio;
+import com.ridenow.models.Usuario;
 import com.ridenow.models.Vehiculo;
 import com.ridenow.models.Viaje;
 import java.sql.SQLException;
@@ -47,6 +49,15 @@ public class ViajeServicio {
     public ViajeDTO delete(ViajeDTO viajeDTO) throws SQLException, ClassNotFoundException {
         boolean eliminado = repositorio.delete(viajeDTO.getId());
         return eliminado? viajeDTO: null;
+    }
+    
+    public List<ViajeDTO> filterByOwner(int idPrestadorDeServicio) throws SQLException, ClassNotFoundException {
+        List<Viaje> lista = repositorio.filterByOwner(idPrestadorDeServicio);
+        List<ViajeDTO> resultado = new ArrayList<>();
+        for (Viaje viaje : lista) {
+            resultado.add(modelToDto(viaje));
+        }
+        return resultado;
     }
     
     private Viaje dtoToModel(ViajeDTO dto) {

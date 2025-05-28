@@ -48,27 +48,36 @@ public class ViajeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
         
+        
         String idViajeParam = request.getParameter("id");
+        try {
+            if (idViajeParam == null) {
+            String idPrestadorDeServicioParam = request.getParameter("idOwner");
 
-        if (idViajeParam == null) {
-            try {
-                List<ViajeDTO> viajes = servicio.all();
+                if (idPrestadorDeServicioParam == null) {
+                    List<ViajeDTO> vehiculos = servicio.all();
+                    response.getWriter().write(gson.toJson(vehiculos));
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    return;
+                }
+                int idPrestadorDeServicio = Integer.parseInt(idPrestadorDeServicioParam);
+                List<ViajeDTO> viajes = servicio.filterByOwner(idPrestadorDeServicio);
                 response.getWriter().write(gson.toJson(viajes));
                 response.setStatus(HttpServletResponse.SC_OK);
                 return;
-            } catch (SQLException | ClassNotFoundException ex) {
-                response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        }
-        int id = Integer.parseInt(idViajeParam);
-        ViajeDTO viajeDTO = new ViajeDTO();
-        viajeDTO.setId(id);
-        try {
+            int id = Integer.parseInt(idViajeParam);
+            ViajeDTO viajeDTO = new ViajeDTO();
+            viajeDTO.setId(id);
             ViajeDTO resultado = servicio.get(viajeDTO);
-            response.getWriter().write(gson.toJson(resultado));
-            response.setStatus(HttpServletResponse.SC_OK);
             
+            if (resultado != null) {
+                response.getWriter().write(gson.toJson(resultado));
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.getWriter().write(gson.toJson(new Mensaje("Viaje no encontrado")));
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
         } catch (SQLException | ClassNotFoundException ex) {
             response.getWriter().write(gson.toJson(new Mensaje(ex.getMessage())));
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
