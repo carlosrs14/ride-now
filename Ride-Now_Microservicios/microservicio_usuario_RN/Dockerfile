@@ -1,17 +1,17 @@
-# Imagen base con Tomcat
-FROM tomcat:11-jdk21
+FROM tomcat:11.0
+COPY dist/microservicio_usuario_RN.war /usr/local/tomcat/webapps/usuarios.war
 
 # Elimina las apps por defecto de Tomcat (opcional)
-RUN rm -rf /usr/local/tomcat/webapps/*
+#RUN rm -rf /usr/local/tomcat/webapps/*
 
 # Copia tu WAR al directorio de despliegue de Tomcat
-COPY dist/microservicio_usuario_RN.war /usr/local/tomcat/webapps/ROOT.war
+#COPY dist/microservicio_usuario_RN.war /usr/local/tomcat/webapps/ROOT.war
 
 # Expone el puerto por el que se accede a Tomcat
-EXPOSE 8081
+#EXPOSE 8081
 
 # Comando de arranque (ya viene por defecto, pero se puede añadir)
-CMD ["catalina.sh", "run"]
+#CMD ["catalina.sh", "run"]
 
 
 # docker build -t microservicio-usuario .
